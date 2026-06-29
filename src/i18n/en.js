@@ -109,5 +109,11 @@ export default {
       'It’s getting late… the lake will be cold tomorrow too.',
       'Every file tells a story. Pick one.',
     ],
+    easter: {
+      ravenclaw: 'Ravenclaw mode engaged. The mind, sharpened.',
+      coffee: 'Refill denied. The investigation continues.',
+      yoda: 'Hmm. Read the timeline, you must.',
+      vader: 'The dark side keeps immaculate logs.',
+    },
   },
 }

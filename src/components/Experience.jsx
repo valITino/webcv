@@ -1,18 +1,27 @@
-import { Suspense } from 'react'
+import { Suspense, useCallback } from 'react'
 import { Canvas } from '@react-three/fiber'
 import { AdaptiveDpr, AdaptiveEvents } from '@react-three/drei'
 import Scene from '../scene/Scene.jsx'
 import { useStore } from '../store/useStore.js'
+import { useKonami } from '../hooks/useKonami.js'
 import Hud from '../ui/Hud.jsx'
 import Tooltip from '../ui/Tooltip.jsx'
 import IdleToast from '../ui/IdleToast.jsx'
 import ExhibitPanel from '../ui/ExhibitPanel.jsx'
 import ContactTerminal from '../ui/ContactTerminal.jsx'
 import Credits from '../ui/Credits.jsx'
+import { Flash, RavenclawBadge } from '../ui/Flash.jsx'
 
 export default function Experience() {
   const entered = useStore((s) => s.entered)
   const quality = useStore((s) => s.quality)
+
+  // Hidden Ravenclaw mode (Konami code) — house-colour lighting + crest.
+  const onKonami = useCallback(() => {
+    useStore.getState().toggleRavenclaw()
+    if (useStore.getState().ravenclaw) useStore.getState().setFlash('easter.ravenclaw')
+  }, [])
+  useKonami(onKonami)
 
   return (
     <>
@@ -40,6 +49,8 @@ export default function Experience() {
           <ExhibitPanel />
           <ContactTerminal />
           <Credits />
+          <Flash />
+          <RavenclawBadge />
         </>
       )}
     </>

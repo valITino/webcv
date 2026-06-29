@@ -109,5 +109,11 @@ export default {
       'Il se fait tard… le lac sera froid demain aussi.',
       'Chaque dossier raconte une histoire. Choisissez-en une.',
     ],
+    easter: {
+      ravenclaw: 'Mode Serdaigle activé. L’esprit, aiguisé.',
+      coffee: 'Recharge refusée. L’enquête continue.',
+      yoda: 'Hmm. La chronologie, lire tu dois.',
+      vader: 'Le côté obscur tient des journaux impeccables.',
+    },
   },
 }

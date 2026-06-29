@@ -32,6 +32,13 @@ export const useStore = create((set, get) => ({
 
   muted: true,
   toggleMuted: () => set({ muted: !get().muted }),
+
+  // ── easter eggs ─────────────────────────────────────────
+  ravenclaw: false, // Konami code → house-colours light + crest
+  toggleRavenclaw: () => set({ ravenclaw: !get().ravenclaw }),
+
+  flash: null, // { key, n } — a brief themed line; `key` is an i18n path
+  setFlash: (key) => set({ flash: { key, n: (get().flash?.n || 0) + 1 } }),
 }))
 
 // Debug hook: expose the store for automated screenshots / manual poking.

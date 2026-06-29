@@ -26,92 +26,15 @@ function GlbProp({ url, cfg, env = 0.3, onClick }) {
   )
 }
 
-// ── Shared materials ──────────────────────────────────────
-const brass = { color: '#caa24a', metalness: 0.9, roughness: 0.35 }
-const darkMetal = { color: '#26221c', metalness: 0.85, roughness: 0.45 }
-const bakelite = { color: '#141210', metalness: 0.2, roughness: 0.55 }
-
-// ── Desk lamp (light source visual; the SpotLight lives in Lighting) ──────
+// ── Desk lamp (GLB) — the warm key light lives in Lighting.jsx ─────────────
 export function Lamp() {
-  const p = PROPS.lamp
-  return (
-    <Interactive kind="lamp" position={p.position}>
-      {() => (
-        <group>
-          {/* base */}
-          <mesh castShadow position={[0, 0.02, 0]}>
-            <cylinderGeometry args={[0.13, 0.15, 0.04, 32]} />
-            <meshStandardMaterial {...darkMetal} />
-          </mesh>
-          {/* stem */}
-          <mesh castShadow position={[0, 0.34, 0]}>
-            <cylinderGeometry args={[0.016, 0.02, 0.64, 16]} />
-            <meshStandardMaterial {...brass} />
-          </mesh>
-          {/* arm toward desk centre */}
-          <mesh castShadow position={[0.22, 0.66, 0.16]} rotation={[0.5, 0, -0.9]}>
-            <cylinderGeometry args={[0.014, 0.014, 0.6, 16]} />
-            <meshStandardMaterial {...brass} />
-          </mesh>
-          {/* shade */}
-          <group position={[0.42, 0.74, 0.32]} rotation={[0.9, 0, -0.5]}>
-            <mesh castShadow>
-              <coneGeometry args={[0.16, 0.2, 32, 1, true]} />
-              <meshStandardMaterial {...darkMetal} side={THREE.DoubleSide} />
-            </mesh>
-            {/* warm bulb */}
-            <mesh position={[0, 0.02, 0]}>
-              <sphereGeometry args={[0.05, 16, 16]} />
-              <meshStandardMaterial color="#fff4d0" emissive="#ffebb3" emissiveIntensity={3} toneMapped={false} />
-            </mesh>
-            <pointLight position={[0, -0.02, 0]} color="#ffebb3" intensity={2.2} distance={1.4} decay={2} />
-          </group>
-        </group>
-      )}
-    </Interactive>
-  )
+  return <GlbProp url="/models/lamp.glb" cfg={PROPS.lamp} env={0.4} />
 }
 
-// ── Desk phone → Communications Terminal (contact) ────────────────────────
+// ── Desk phone (GLB) → Communications Terminal (contact) ──────────────────
 export function Phone() {
-  const p = PROPS.phone
   const openContact = useStore((s) => s.openContact)
-  return (
-    <Interactive kind="phone" position={p.position} rotation={p.rotation} onClick={openContact}>
-      {(hovered) => (
-        <group scale={hovered ? 1.05 : 1}>
-          {/* base */}
-          <mesh castShadow position={[0, 0.03, 0]}>
-            <boxGeometry args={[0.26, 0.06, 0.16]} />
-            <meshStandardMaterial {...bakelite} />
-          </mesh>
-          {/* dial */}
-          <mesh position={[0.05, 0.062, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-            <torusGeometry args={[0.045, 0.012, 12, 24]} />
-            <meshStandardMaterial {...brass} />
-          </mesh>
-          {/* handset cradle */}
-          <mesh castShadow position={[-0.085, 0.085, 0]}>
-            <boxGeometry args={[0.05, 0.05, 0.18]} />
-            <meshStandardMaterial {...bakelite} />
-          </mesh>
-          {/* handset bar */}
-          <mesh castShadow position={[-0.085, 0.12, 0]}>
-            <boxGeometry args={[0.04, 0.03, 0.22]} />
-            <meshStandardMaterial {...bakelite} />
-          </mesh>
-          <mesh castShadow position={[-0.085, 0.11, 0.11]}>
-            <cylinderGeometry args={[0.03, 0.03, 0.03, 16]} />
-            <meshStandardMaterial {...bakelite} />
-          </mesh>
-          <mesh castShadow position={[-0.085, 0.11, -0.11]}>
-            <cylinderGeometry args={[0.03, 0.03, 0.03, 16]} />
-            <meshStandardMaterial {...bakelite} />
-          </mesh>
-        </group>
-      )}
-    </Interactive>
-  )
+  return <GlbProp url="/models/phone.glb" cfg={PROPS.phone} onClick={openContact} />
 }
 
 // ── Monitor with a live terminal readout (opens the evidence log) ─────────
@@ -204,11 +127,13 @@ export function Supplies() {
 
 // ── LEGO Darth Vader (GLB, static) — personality piece ────────────────────
 export function Vader() {
-  return <GlbProp url="/models/vader.glb" cfg={PROPS.vader} env={0.5} />
+  const setFlash = useStore((s) => s.setFlash)
+  return <GlbProp url="/models/vader.glb" cfg={PROPS.vader} env={0.5} onClick={() => setFlash('easter.vader')} />
 }
 
 // ── LEGO Yoda (GLB, looping idle animation) — personality piece ───────────
 export function Yoda() {
+  const setFlash = useStore((s) => s.setFlash)
   const { scene, animations } = useGLTF('/models/yoda.glb')
   const obj = useMemo(() => {
     warmify(scene, { env: 0.45 })
@@ -226,7 +151,12 @@ export function Yoda() {
     }
   }, [actions, names])
   return (
-    <Interactive kind="yoda" position={PROPS.yoda.position} rotation={PROPS.yoda.rotation}>
+    <Interactive
+      kind="yoda"
+      position={PROPS.yoda.position}
+      rotation={PROPS.yoda.rotation}
+      onClick={() => setFlash('easter.yoda')}
+    >
       {(hovered) => (
         <group scale={hovered ? 1.06 : 1}>
           <primitive object={obj} scale={scale} position={position} />
@@ -236,6 +166,8 @@ export function Yoda() {
   )
 }
 
+useGLTF.preload('/models/lamp.glb')
+useGLTF.preload('/models/phone.glb')
 useGLTF.preload('/models/magnifier.glb')
 useGLTF.preload('/models/keys.glb')
 useGLTF.preload('/models/supplies.glb')

@@ -109,5 +109,11 @@ export default {
       'Es wird spät… der See ist morgen auch noch kalt.',
       'Jede Akte erzählt eine Geschichte. Wählen Sie eine.',
     ],
+    easter: {
+      ravenclaw: 'Ravenclaw-Modus aktiviert. Der Verstand, geschärft.',
+      coffee: 'Nachschub verweigert. Die Ermittlung geht weiter.',
+      yoda: 'Hmm. Die Timeline lesen, du musst.',
+      vader: 'Die dunkle Seite führt tadellose Logs.',
+    },
   },
 }
