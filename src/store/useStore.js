@@ -22,7 +22,7 @@ export const useStore = create((set, get) => ({
   focus: null, // camera focus target id (exhibit id | 'phone' | 'board' | null)
 
   openExhibit: (id) => {
-    if (!get().muted) sound.tick()
+    if (!get().muted) sound.whoosh() // folder lifts off the desk to inspect
     set({ overlay: 'exhibit', activeExhibit: id, focus: id })
   },
   openContact: () => {

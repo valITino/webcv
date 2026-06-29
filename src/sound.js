@@ -46,6 +46,32 @@ export function setMuted(muted) {
   master.gain.linearRampToValueAtTime(muted ? 0 : 0.3, ctx.currentTime + 0.5)
 }
 
+// Paper "whoosh" — a band-passed noise sweep, for lifting a folder to inspect.
+export function whoosh() {
+  if (!ctx || !master) return
+  const dur = 0.5
+  const buf = ctx.createBuffer(1, Math.floor(ctx.sampleRate * dur), ctx.sampleRate)
+  const d = buf.getChannelData(0)
+  for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1
+  const src = ctx.createBufferSource()
+  src.buffer = buf
+  const bp = ctx.createBiquadFilter()
+  bp.type = 'bandpass'
+  bp.Q.value = 0.8
+  const t = ctx.currentTime
+  bp.frequency.setValueAtTime(280, t)
+  bp.frequency.exponentialRampToValueAtTime(2000, t + dur)
+  const g = ctx.createGain()
+  g.gain.setValueAtTime(0.0001, t)
+  g.gain.linearRampToValueAtTime(0.22, t + 0.06)
+  g.gain.exponentialRampToValueAtTime(0.0001, t + dur)
+  src.connect(bp)
+  bp.connect(g)
+  g.connect(master)
+  src.start(t)
+  src.stop(t + dur)
+}
+
 // Soft interaction tick (file pulled, phone lifted, etc.)
 export function tick() {
   if (!ctx || !master) return
