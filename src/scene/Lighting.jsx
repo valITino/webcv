@@ -7,6 +7,7 @@ import { useStore } from '../store/useStore.js'
 export default function Lighting() {
   const ravenclaw = useStore((s) => s.ravenclaw)
   const lampOn = useStore((s) => s.lampOn)
+  const inspecting = useStore((s) => s.activeExhibit) // a folder is on the stage
   const key = ravenclaw ? '#5b8bd0' : '#ffebb3' // lamp key light
   const warm = ravenclaw ? '#cd7f32' : '#e7b87a' // warm bounce / rim → bronze in RC mode
   const keyIntensity = lampOn ? (ravenclaw ? 20 : 16) : 0 // clicking the lamp burns it out
@@ -33,6 +34,11 @@ export default function Lighting() {
       />
       {/* Local glow at the lamp head (sells "the lamp is on" + feeds bloom) */}
       <pointLight position={[-1.02, 0.62, -0.02]} color={key} intensity={glow} distance={1.5} decay={2} />
+
+      {/* Stage light — lifts the examined folder out of shadow (only while inspecting) */}
+      {inspecting && (
+        <pointLight position={[1.0, 1.5, 2.3]} color="#fff0d4" intensity={3.2} distance={3} decay={2} />
+      )}
 
       {/* Cool fill so the front + right side of objects read */}
       <directionalLight position={[2.6, 2.0, 3.0]} intensity={0.42} color="#6076a0" />
