@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { useProgress } from '@react-three/drei'
+import { useProgress, ContactShadows } from '@react-three/drei'
 import { Selection } from '@react-three/postprocessing'
 import Lighting from './Lighting.jsx'
 import CameraRig from './CameraRig.jsx'
@@ -50,6 +50,18 @@ export default function Scene() {
         </group>
         <Effects />
       </Selection>
+
+      {/* soft contact shadows ground the props on the desktop */}
+      <ContactShadows
+        position={[0, 0.012, 0.15]}
+        scale={4.6}
+        resolution={1024}
+        blur={2.6}
+        far={0.85}
+        opacity={0.5}
+        color="#000000"
+        frames={1}
+      />
 
       {/* dark floor to ground the desk legs + catch the lamp shadow */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -1.52, 0]} receiveShadow>
