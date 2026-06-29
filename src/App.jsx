@@ -4,6 +4,7 @@ import DesktopGate from './components/DesktopGate.jsx'
 import Intro from './components/Intro.jsx'
 import Experience from './components/Experience.jsx'
 import Cursor from './ui/Cursor.jsx'
+import Admin from './ui/Admin.jsx'
 
 export default function App() {
   const isDesktop = useIsDesktop()
@@ -21,6 +22,9 @@ export default function App() {
 
       {/* Custom magnifier cursor */}
       <Cursor />
+
+      {/* In-browser content admin (?admin or Ctrl/Cmd+Shift+E) */}
+      <Admin />
     </div>
   )
 }

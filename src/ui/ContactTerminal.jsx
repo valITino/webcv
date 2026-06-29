@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import { useStore } from '../store/useStore.js'
+import { useContent } from '../store/useContent.js'
 import Overlay from './Overlay.jsx'
-import { profile } from '../data/profile.js'
 
 function Line({ k, children }) {
   return (
@@ -14,6 +14,7 @@ function Line({ k, children }) {
 
 export default function ContactTerminal() {
   const { t } = useTranslation()
+  const profile = useContent((s) => s.profile)
   const overlay = useStore((s) => s.overlay)
   return (
     <Overlay open={overlay === 'contact'} align="right" maxW="max-w-lg">

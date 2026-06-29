@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import { useStore } from '../store/useStore.js'
-import { profile } from '../data/profile.js'
+import { useContent } from '../store/useContent.js'
 import LangSwitch from './LangSwitch.jsx'
 
 function Dot() {
@@ -9,6 +9,7 @@ function Dot() {
 
 export default function Hud() {
   const { t } = useTranslation()
+  const profile = useContent((s) => s.profile)
   const overlay = useStore((s) => s.overlay)
   const focus = useStore((s) => s.focus)
   const close = useStore((s) => s.closeOverlay)

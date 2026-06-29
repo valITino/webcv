@@ -4,7 +4,7 @@ import { useStore } from '../store/useStore.js'
 import Overlay from './Overlay.jsx'
 import Stars from './Stars.jsx'
 import { getExhibit } from '../data/registry.js'
-import { profile } from '../data/profile.js'
+import { useContent } from '../store/useContent.js'
 import { techSkills, softSkills } from '../data/skills.js'
 import { experience, certificates, education, projects, testimonials } from '../data/exhibits.js'
 
@@ -32,6 +32,7 @@ function Label({ children }) {
 // ── per-exhibit content ───────────────────────────────────
 function Subject() {
   const { t } = useTranslation()
+  const profile = useContent((s) => s.profile)
   return (
     <div className="space-y-6 text-ink/85">
       <div className="flex flex-col gap-5 sm:flex-row">

@@ -3,11 +3,12 @@ import { useTranslation } from 'react-i18next'
 import { useProgress } from '@react-three/drei'
 import gsap from 'gsap'
 import { useStore } from '../store/useStore.js'
-import { profile } from '../data/profile.js'
+import { useContent } from '../store/useContent.js'
 import LangSwitch from '../ui/LangSwitch.jsx'
 
 export default function Intro() {
   const { t } = useTranslation()
+  const profile = useContent((s) => s.profile)
   const enter = useStore((s) => s.enter)
   const { progress } = useProgress()
   const [loaded, setLoaded] = useState(false)
