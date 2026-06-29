@@ -31,7 +31,9 @@ export default function CameraRig() {
       // Free mode — orbit slightly around the desk following the mouse.
       const b = base.current
       const az = b.az + p.x * 0.42
-      const polar = THREE.MathUtils.clamp(b.polar - p.y * 0.16, 0.62, 1.45)
+      // Bias the swing upward: the resting pose looks across the desktop; the
+      // clamp keeps the mouse from ever dropping the camera into the drawer wall.
+      const polar = THREE.MathUtils.clamp(b.polar - p.y * 0.13, 0.66, 1.36)
       const hr = b.radius * Math.sin(polar)
       desiredPos.set(
         CAMERA.overview.target[0] + hr * Math.sin(az),

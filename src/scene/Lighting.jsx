@@ -44,9 +44,11 @@ export default function Lighting() {
       <directionalLight position={[2.6, 2.0, 3.0]} intensity={0.42} color="#6076a0" />
       {/* Warm bounce from the desk */}
       <pointLight position={[0.4, 0.5, 0.8]} intensity={0.5} distance={3} decay={2} color={warm} />
-      {/* Wash on the evidence board so its baked detective art reads as the
-          backdrop behind the pinned portrait (intensity only; geometry verified) */}
-      <pointLight position={[0, 1.4, -0.7]} intensity={0.72} distance={3.2} decay={2} color="#cdbe9a" />
+      {/* Wash on the evidence board so its baked detective art reads as the rich
+          backdrop (KH-style). Two lights give even coverage across its full span:
+          an upper wash for the map/clippings and a lower fill for the photos. */}
+      <pointLight position={[0, 1.55, -0.95]} intensity={1.7} distance={4.4} decay={1.7} color="#d8cba6" />
+      <pointLight position={[0, 0.78, -0.95]} intensity={0.85} distance={3.4} decay={1.9} color="#c9bb95" />
       {/* Gentle rim from the right to lift the coffee / Exhibit F corner */}
       <pointLight position={[1.7, 0.7, 0.9]} intensity={0.45} distance={2.6} decay={2} color={warm} />
 

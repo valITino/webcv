@@ -15,12 +15,12 @@ export const BOARD = {
 
 // Six case-file folders fanned across the desktop, one per exhibit (A–F).
 const FAN = [
-  { x: -1.42, z: 0.12, ry: 0.16, y: 0.0 },
-  { x: -0.86, z: 0.34, ry: 0.08, y: 0.012 },
-  { x: -0.28, z: 0.46, ry: -0.02, y: 0.024 },
-  { x: 0.3, z: 0.46, ry: 0.04, y: 0.036 },
-  { x: 0.88, z: 0.32, ry: -0.1, y: 0.024 },
-  { x: 1.44, z: 0.1, ry: -0.18, y: 0.012 },
+  { x: -1.08, z: 0.2, ry: 0.17, y: 0.0 },
+  { x: -0.66, z: 0.38, ry: 0.08, y: 0.012 },
+  { x: -0.22, z: 0.48, ry: -0.02, y: 0.024 },
+  { x: 0.22, z: 0.48, ry: 0.02, y: 0.036 },
+  { x: 0.66, z: 0.38, ry: -0.08, y: 0.024 },
+  { x: 1.08, z: 0.2, ry: -0.17, y: 0.012 },
 ]
 
 export const FOLDERS = EXHIBITS.map((ex, i) => ({
@@ -31,23 +31,24 @@ export const FOLDERS = EXHIBITS.map((ex, i) => ({
 }))
 
 export const PROPS = {
-  coffee: { position: [1.28, 0, 0.5], target: 0.2, kind: 'coffee' },
+  coffee: { position: [1.22, 0, 0.54], target: 0.2, kind: 'coffee' },
   // GLB props
   lamp: { position: [-1.3, 0, -0.32], rotation: [0, 0.5, 0], target: 0.62, kind: 'lamp' },
   phone: { position: [-1.0, 0, 0.5], rotation: [0, 0.6, 0], target: 0.34, kind: 'phone' },
-  magnifier: { position: [0.62, 0.0, 0.62], rotation: [0, 0.5, 0], target: 0.34, kind: 'magnifier' },
+  magnifier: { position: [0.56, 0.0, 0.58], rotation: [0, 0.5, 0], target: 0.34, kind: 'magnifier' },
   monitor: { position: [0.05, 0, -0.4], rotation: [0, 0, 0], target: 0.75, kind: 'monitor' },
   keys: { position: [-0.42, 0, 0.66], rotation: [0, 0.4, 0], target: 0.2, kind: 'keys' },
   supplies: { position: [-1.5, 0, 0.45], rotation: [0, 0.35, 0], target: 0.46, kind: 'supplies' },
-  yoda: { position: [0.98, 0, 0.52], rotation: [0, -0.35, 0], target: 0.32, kind: 'yoda' },
-  vader: { position: [-0.7, 0, -0.55], rotation: [0, 0.45, 0], target: 0.34, kind: 'vader' },
+  // Two LEGO "guardians" flank the terminal: Vader back-left, Yoda back-right.
+  yoda: { position: [0.74, 0, -0.2], rotation: [0, 0.5, 0], target: 0.32, kind: 'yoda' },
+  vader: { position: [-0.66, 0, -0.5], rotation: [0, 0.5, 0], target: 0.34, kind: 'vader' },
 }
 
 // Camera poses. CAMERA.overview is the resting desk shot — low and across the
 // desk (sitting-at-the-desk intimacy, matching the reference). A clicked folder
 // opens flat in place and the camera dives toward it from the front/above.
 export const CAMERA = {
-  overview: { pos: [0, 0.6, 2.35], target: [0, 0.02, -0.85] },
+  overview: { pos: [0, 0.96, 2.45], target: [0, 0.06, -0.95] },
   folder: (x, z) => ({ pos: [x * 0.4, 0.66, z + 1.18], target: [x, 0.0, z + 0.05] }),
   phone: { pos: [-0.35, 0.6, 1.35], target: [-0.98, 0.02, 0.52] },
   board: { pos: [0.05, 0.95, 1.95], target: [0, 0.7, -1.5] },

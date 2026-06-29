@@ -4,25 +4,27 @@ import { useTexture, Line } from '@react-three/drei'
 import Interactive from './Interactive.jsx'
 import { profile } from '../../data/profile.js'
 
-// Items pinned to the evidence board: the wanted poster (subject photo),
-// a couple of note cards, pushpins and red string. Positioned in the board's
-// front plane; the whole group can be nudged via POS.
-const POS = [0, 1.0, -1.62] // centre of the board face (tuned against the model)
-const SCALE = 1.3
+// A few *personalised* items pinned over the board's already-rich baked
+// detective collage (map, crime-scene photos, fingerprint card, clippings):
+// a small "wanted" polaroid of the subject and a case sticky-note, joined by a
+// thread of red string. Kept small and to one side so the baked art behind
+// stays legible — the board itself is the backdrop, KH-style.
+const POS = [-0.6, 1.26, -1.6] // upper-left region of the board face
+const SCALE = 1.0
 
-function makeNote(lines, accent = '#1a160e') {
+function makeNote(lines, accent = '#c0392b', paper = '#f0e7a4') {
   const c = document.createElement('canvas')
   c.width = 256
   c.height = 256
   const ctx = c.getContext('2d')
-  ctx.fillStyle = '#e8e2d4'
+  ctx.fillStyle = paper
   ctx.fillRect(0, 0, 256, 256)
   ctx.fillStyle = 'rgba(120,96,54,0.10)'
   for (let i = 0; i < 120; i++) ctx.fillRect(Math.random() * 256, Math.random() * 256, 1.5, 1.5)
   ctx.fillStyle = accent
-  ctx.font = '22px "Special Elite", monospace'
+  ctx.font = '26px "Special Elite", monospace'
   ctx.textBaseline = 'top'
-  lines.forEach((l, i) => ctx.fillText(l, 18, 26 + i * 34))
+  lines.forEach((l, i) => ctx.fillText(l, 20, 22 + i * 36))
   const tex = new THREE.CanvasTexture(c)
   tex.colorSpace = THREE.SRGBColorSpace
   return tex
@@ -31,67 +33,63 @@ function makeNote(lines, accent = '#1a160e') {
 function Pin({ position, color = '#c0392b' }) {
   return (
     <mesh position={position}>
-      <sphereGeometry args={[0.018, 16, 16]} />
-      <meshStandardMaterial color={color} metalness={0.3} roughness={0.4} emissive={color} emissiveIntensity={0.15} />
+      <sphereGeometry args={[0.016, 16, 16]} />
+      <meshStandardMaterial color={color} metalness={0.3} roughness={0.4} emissive={color} emissiveIntensity={0.25} />
     </mesh>
   )
 }
 
 export default function BoardPins() {
   const portrait = useTexture('/images/portrait.png')
-  const note1 = useMemo(() => makeNote(['CASE №', profile.caseNo, '', 'STATUS:', 'AT LARGE'], '#c0392b'), [])
-  const note2 = useMemo(() => makeNote([profile.fileRef, 'SECURE', 'ACCESS', 'GRANTED']), [])
+  const note = useMemo(() => makeNote(['CASE №', profile.caseNo, '', 'STATUS:', 'AT LARGE']), [])
 
-  const poster = [0, 0.12, 0.01]
-  const card1 = [-0.78, -0.28, 0.02]
-  const card2 = [0.8, 0.06, 0.02]
+  const card = [0.5, -0.1, 0.02]
 
   return (
     <group position={POS} scale={SCALE}>
-      {/* red string */}
-      <Line points={[poster, card1]} color="#c0392b" lineWidth={1.4} />
-      <Line points={[poster, card2]} color="#c0392b" lineWidth={1.4} />
-      <Line points={[card1, card2]} color="#9c2f23" lineWidth={1} dashed dashSize={0.03} gapSize={0.02} />
+      {/* red string — a short thread joining the polaroid to the case note and a
+          tail down into the board's own web. Subtle, not spanning the board. */}
+      <Line points={[[0, -0.16, 0.03], [0.5, 0.02, 0.03]]} color="#c0392b" lineWidth={1.3} />
+      <Line
+        points={[[0, -0.16, 0.03], [-0.34, -0.62, 0.03]]}
+        color="#9c2f23"
+        lineWidth={1}
+        dashed
+        dashSize={0.035}
+        gapSize={0.022}
+      />
 
-      {/* wanted poster */}
-      <Interactive kind="portrait" position={poster}>
+      {/* subject "wanted" polaroid — small, framed, pinned (interactive) */}
+      <Interactive kind="portrait" position={[0, 0, 0.02]}>
         {(hovered) => (
-          <group scale={hovered ? 1.04 : 1}>
-            {/* aged backing */}
-            <mesh position={[0, 0, -0.004]}>
-              <planeGeometry args={[0.62, 0.78]} />
-              <meshStandardMaterial color="#ddd3bc" roughness={0.9} />
+          <group scale={hovered ? 1.05 : 1} rotation={[0, 0, -0.05]}>
+            {/* white polaroid frame (photo sits high → thicker bottom border) */}
+            <mesh>
+              <planeGeometry args={[0.34, 0.4]} />
+              <meshStandardMaterial color="#ece6d8" roughness={0.85} />
             </mesh>
-            {/* WANTED bar */}
-            <mesh position={[0, 0.31, 0]}>
-              <planeGeometry args={[0.62, 0.16]} />
-              <meshStandardMaterial color="#1a160e" roughness={0.8} />
+            {/* mugshot-grey photo backing (the portrait PNG is a cut-out) */}
+            <mesh position={[0, 0.04, 0.002]}>
+              <planeGeometry args={[0.28, 0.28]} />
+              <meshStandardMaterial color="#494540" roughness={0.9} />
             </mesh>
-            {/* portrait */}
-            <mesh position={[0, -0.02, 0.001]}>
-              <planeGeometry args={[0.5, 0.5]} />
+            {/* subject */}
+            <mesh position={[0, 0.04, 0.004]}>
+              <planeGeometry args={[0.28, 0.28]} />
               <meshBasicMaterial map={portrait} transparent toneMapped={false} />
             </mesh>
-            <Pin position={[-0.26, 0.36, 0.01]} />
-            <Pin position={[0.26, 0.36, 0.01]} />
+            <Pin position={[0, 0.22, 0.02]} />
           </group>
         )}
       </Interactive>
 
-      {/* note cards */}
-      <group position={card1} rotation={[0, 0, -0.08]}>
+      {/* personalised case sticky-note (yellow, like the baked board's notes) */}
+      <group position={card} rotation={[0, 0, 0.07]}>
         <mesh>
-          <planeGeometry args={[0.26, 0.26]} />
-          <meshBasicMaterial map={note1} toneMapped={false} />
+          <planeGeometry args={[0.24, 0.24]} />
+          <meshBasicMaterial map={note} toneMapped={false} />
         </mesh>
-        <Pin position={[0, 0.14, 0.01]} />
-      </group>
-      <group position={card2} rotation={[0, 0, 0.06]}>
-        <mesh>
-          <planeGeometry args={[0.26, 0.26]} />
-          <meshBasicMaterial map={note2} toneMapped={false} />
-        </mesh>
-        <Pin position={[0, 0.14, 0.01]} color="#caa24a" />
+        <Pin position={[0, 0.13, 0.01]} color="#caa24a" />
       </group>
     </group>
   )

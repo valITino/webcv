@@ -11,9 +11,17 @@ export default function Board() {
   const obj = useMemo(() => {
     warmify(scene, { env: 0.12 })
     scene.traverse((o) => {
-      if (o.isMesh) {
+      if (o.isMesh && o.material) {
         o.castShadow = false // backdrop shouldn't cast onto desk
-        if (o.material) o.material.side = THREE.DoubleSide // show whichever face points at us
+        o.material.side = THREE.DoubleSide // show whichever face points at us
+        // Self-illuminate the baked detective art so the board reads as a rich,
+        // legible backdrop (KH-style) instead of vanishing into the noir shadow.
+        if (o.material.map) {
+          o.material.emissive = new THREE.Color('#ffffff')
+          o.material.emissiveMap = o.material.map
+          o.material.emissiveIntensity = 0.32
+          o.material.needsUpdate = true
+        }
       }
     })
     return scene
