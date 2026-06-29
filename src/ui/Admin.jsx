@@ -82,9 +82,9 @@ export default function Admin() {
       <div className="flex items-center justify-between border-b border-paper/15 px-4 py-3">
         <div>
           <p className="font-stencil text-sm tracking-[0.2em] text-lamp">CONTENT ADMIN</p>
-          <p className="font-type text-[10px] uppercase tracking-widest text-paper/40">localStorage · no backend</p>
+          <p className="font-hud text-[10px] uppercase tracking-widest text-paper/40">localStorage · no backend</p>
         </div>
-        <button onClick={() => setAdmin(false)} className="font-type text-xs text-paper/60 hover:text-evidence">
+        <button onClick={() => setAdmin(false)} className="font-hud text-xs text-paper/60 hover:text-redink">
           CLOSE ✕
         </button>
       </div>
@@ -92,12 +92,12 @@ export default function Admin() {
       <div className="scroll-thin flex-1 overflow-y-auto px-4 py-3">
         {FIELDS.map((f, i) =>
           f.section ? (
-            <p key={i} className="mb-1 mt-4 font-type text-[10px] uppercase tracking-[0.2em] text-evidence">
+            <p key={i} className="mb-1 mt-4 font-hud text-[10px] uppercase tracking-[0.2em] text-redink">
               {f.section}
             </p>
           ) : (
             <label key={i} className="mb-2 block">
-              <span className="mb-0.5 block font-type text-[10px] uppercase tracking-wide text-paper/45">{f.label}</span>
+              <span className="mb-0.5 block font-hud text-[10px] uppercase tracking-wide text-paper/45">{f.label}</span>
               {f.area ? (
                 <textarea
                   rows={3}
@@ -122,7 +122,7 @@ export default function Admin() {
         <button onClick={() => fileRef.current?.click()} className="btn-noir text-[11px]">IMPORT JSON</button>
         <button
           onClick={() => confirm('Reset all content to defaults?') && reset()}
-          className="btn-noir col-span-2 border-evidence/50 text-[11px] text-evidence/90 hover:bg-evidence hover:text-paper"
+          className="btn-noir col-span-2 border-redink/50 text-[11px] text-redink/90 hover:bg-redink hover:text-paper"
         >
           RESET TO DEFAULTS
         </button>

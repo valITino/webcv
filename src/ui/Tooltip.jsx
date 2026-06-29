@@ -25,7 +25,7 @@ export default function Tooltip() {
       }`}
       style={{ left: pos.x, top: pos.y }}
     >
-      <div className="border border-lamp/30 bg-ink/85 px-3 py-1.5 font-type text-[12px] text-lamp/90 shadow-lg">
+      <div className="border border-redink/40 bg-ink/90 px-3 py-1.5 font-hud text-[12px] text-paper/90 shadow-[0_0_14px_rgba(255,42,42,0.12)]">
         {hovered ? t(`tooltips.${hovered.kind}`) : ''}
       </div>
     </div>

@@ -13,9 +13,9 @@ const FLAGS = { IT: '🇮🇹', RS: '🇷🇸', CH: '🇨🇭', de: '🇩🇪', 
 function Header({ no, code, title }) {
   const { t } = useTranslation()
   return (
-    <div className="mb-7 border-b border-evidence/30 pb-4 pr-20">
-      <div className="flex items-center justify-between font-type text-[10px] uppercase tracking-[0.22em]">
-        <span className="text-evidence">
+    <div className="mb-7 border-b border-redink/30 pb-4 pr-20">
+      <div className="flex items-center justify-between font-hud text-[10px] uppercase tracking-[0.22em]">
+        <span className="text-redink glow-red">
           {t('panel.exhibit')} — {no}
         </span>
         <span className="text-paper/40">{code}</span>
@@ -26,14 +26,14 @@ function Header({ no, code, title }) {
 }
 
 function Label({ children }) {
-  return <p className="mb-2 font-type text-[11px] uppercase tracking-[0.22em] text-evidence">{children}</p>
+  return <p className="mb-2 font-hud text-[11px] uppercase tracking-[0.22em] text-redink">{children}</p>
 }
 
 // Red square-numbered serif sub-heading (KH "■01 Mission Log" style).
 function SecHead({ n, children }) {
   return (
     <div className="mb-3 flex items-center gap-2.5">
-      <span className="grid h-5 w-5 place-items-center bg-evidence font-type text-[10px] font-bold text-paper">{n}</span>
+      <span className="grid h-5 w-5 place-items-center bg-redink font-hud text-[10px] font-bold text-paper shadow-[0_0_10px_rgba(255,42,42,0.5)]">{n}</span>
       <h3 className="font-headline text-xl text-paper">{children}</h3>
     </div>
   )
@@ -53,11 +53,11 @@ function Subject() {
             className="block w-full"
             style={{ filter: 'grayscale(1) contrast(1.15) brightness(0.92)' }}
           />
-          <p className="bg-evidence py-0.5 text-center font-type text-[8px] tracking-widest text-paper">{profile.caseNo}</p>
+          <p className="bg-redink py-0.5 text-center font-hud text-[8px] tracking-widest text-paper">{profile.caseNo}</p>
         </div>
         <div className="font-ui text-sm">
           <p className="font-headline text-2xl text-paper">{profile.name}</p>
-          <p className="font-type text-xs uppercase tracking-[0.2em] text-evidence">{profile.title}</p>
+          <p className="font-hud text-xs uppercase tracking-[0.2em] text-redink">{profile.title}</p>
           <dl className="mt-3 space-y-1.5">
             <Row k={t('panel.current')} v={`${profile.current.org} · ${profile.current.period}`} />
             <Row k="DOB" v={profile.dob} />
@@ -73,7 +73,7 @@ function Subject() {
           {profile.languages.map((l) => (
             <li key={l.lang} className="flex flex-wrap items-baseline gap-x-2">
               <span className="font-semibold text-paper">{l.lang}</span>
-              <span className="font-type text-[11px] uppercase tracking-widest text-evidence">{l.level}</span>
+              <span className="font-hud text-[11px] uppercase tracking-widest text-redink">{l.level}</span>
               <span className="italic text-paper/50">{l.exhibit}</span>
             </li>
           ))}
@@ -91,14 +91,14 @@ function Subject() {
         </div>
       </div>
 
-      <div className="border-l-2 border-evidence/60 pl-4">
+      <div className="border-l-2 border-redink/60 pl-4">
         <Label>{t('panel.statement')}</Label>
         {profile.manifesto.map((p, i) => (
           <p key={i} className="mb-3 font-headline text-[15px] italic leading-relaxed text-paper/75">
             {p}
           </p>
         ))}
-        <p className="text-right font-type text-xs tracking-widest text-paper/50">{profile.manifestoSign}</p>
+        <p className="text-right font-hud text-xs tracking-widest text-paper/50">{profile.manifestoSign}</p>
       </div>
     </div>
   )
@@ -107,7 +107,7 @@ function Subject() {
 function Row({ k, v }) {
   return (
     <div className="flex gap-3">
-      <dt className="w-20 shrink-0 font-type text-[11px] uppercase tracking-widest text-paper/40">{k}</dt>
+      <dt className="w-20 shrink-0 font-hud text-[11px] uppercase tracking-widest text-paper/40">{k}</dt>
       <dd className="text-paper/80">{v}</dd>
     </div>
   )
@@ -116,7 +116,7 @@ function Row({ k, v }) {
 function SkillGroup({ group, items }) {
   return (
     <div className="mb-5 break-inside-avoid">
-      <p className="mb-2 font-type text-[11px] uppercase tracking-[0.18em] text-evidence">{group}</p>
+      <p className="mb-2 font-hud text-[11px] uppercase tracking-[0.18em] text-redink">{group}</p>
       <ul className="space-y-1.5">
         {items.map(([name, val]) => (
           <li key={name} className="flex items-center justify-between gap-3 text-[13px] text-paper/80">
@@ -143,8 +143,10 @@ function Skills() {
           <button
             key={id}
             onClick={() => setTab(id)}
-            className={`px-4 py-1.5 font-type text-[11px] uppercase tracking-[0.18em] transition-colors ${
-              tab === id ? 'bg-evidence text-paper' : 'border border-paper/25 text-paper/60 hover:border-paper/50'
+            className={`px-4 py-1.5 font-hud text-[11px] uppercase tracking-[0.18em] transition-colors ${
+              tab === id
+                ? 'bg-redink text-paper shadow-[0_0_12px_rgba(255,42,42,0.45)]'
+                : 'border border-paper/25 text-paper/60 hover:border-paper/50'
             }`}
           >
             {lbl}
@@ -165,17 +167,17 @@ function Record() {
     <ol className="relative space-y-6 border-l border-paper/15 pl-5">
       {experience.map((e, i) => (
         <li key={i} className="relative">
-          <span className="absolute -left-[27px] top-1.5 h-3 w-3 rounded-full border-2 border-ink bg-evidence" />
+          <span className="absolute -left-[27px] top-1.5 h-3 w-3 rounded-full border-2 border-ink bg-redink" />
           <div className="flex flex-wrap items-baseline justify-between gap-x-3">
             <h3 className="font-headline text-lg text-paper">{e.role}</h3>
             {e.current && (
-              <span className="border border-evidence px-1.5 py-0.5 font-type text-[9px] uppercase tracking-widest text-evidence">
+              <span className="border border-redink px-1.5 py-0.5 font-hud text-[9px] uppercase tracking-widest text-redink">
                 ACTIVE
               </span>
             )}
           </div>
-          <p className="font-type text-[12px] uppercase tracking-wide text-evidence/90">
-            <span className="text-evidence">»</span> {e.org} · {e.period}
+          <p className="font-hud text-[12px] uppercase tracking-wide text-redink/90">
+            <span className="text-redink">»</span> {e.org} · {e.period}
           </p>
           <ul className="mt-1.5 list-disc space-y-0.5 pl-4 text-[13px] text-paper/70 marker:text-paper/30">
             {e.points.map((p, j) => (
@@ -200,16 +202,16 @@ function Credentials() {
             <li key={i} className="border-l border-paper/15 pl-3">
               <div className="flex flex-wrap items-baseline justify-between gap-x-3">
                 <h4 className="font-semibold text-paper">{c.title}</h4>
-                <span className="font-type text-[11px] tracking-wide text-paper/45">{c.date}</span>
+                <span className="font-hud text-[11px] tracking-wide text-paper/45">{c.date}</span>
               </div>
-              <p className="font-type text-[11px] uppercase tracking-wide text-evidence/90">{c.issuer}</p>
+              <p className="font-hud text-[11px] uppercase tracking-wide text-redink/90">{c.issuer}</p>
               {c.detail && <p className="mt-0.5 text-[12px] leading-snug text-paper/65">{c.detail}</p>}
               {c.verify && (
                 <a
                   href={`https://${c.verify}`}
                   target="_blank"
                   rel="noreferrer"
-                  className="font-type text-[11px] tracking-wide text-cyber underline decoration-dotted hover:text-evidence"
+                  className="font-hud text-[11px] tracking-wide text-cyber underline decoration-dotted hover:text-redink"
                 >
                   {t('panel.verify')} ↗
                 </a>
@@ -225,11 +227,11 @@ function Credentials() {
             <li key={i} className="border-l border-paper/15 pl-3">
               <div className="flex flex-wrap items-baseline justify-between gap-x-3">
                 <h4 className="font-semibold text-paper">{e.program}</h4>
-                <span className="border border-paper/25 px-1.5 font-type text-[9px] uppercase tracking-widest text-paper/55">
+                <span className="border border-paper/25 px-1.5 font-hud text-[9px] uppercase tracking-widest text-paper/55">
                   {badge[e.status] || e.status}
                 </span>
               </div>
-              <p className="font-type text-[11px] uppercase tracking-wide text-evidence/90">
+              <p className="font-hud text-[11px] uppercase tracking-wide text-redink/90">
                 {e.school} · {e.period}
               </p>
               {e.detail && <p className="mt-0.5 text-[12px] leading-snug text-paper/65">{e.detail}</p>}
@@ -249,18 +251,18 @@ function Cases() {
         <div key={i} className="flex flex-col border border-paper/15 bg-paper/[0.03] p-3.5">
           <div className="mb-1 flex items-baseline justify-between gap-2">
             <h4 className="font-headline text-base text-paper">{p.name}</h4>
-            <span className="font-type text-[9px] uppercase tracking-widest text-evidence/70">
+            <span className="font-hud text-[9px] uppercase tracking-widest text-redink/70">
               {String(i + 1).padStart(2, '0')}
             </span>
           </div>
           <p className="flex-1 text-[12px] leading-snug text-paper/70">{p.blurb}</p>
-          <p className="mt-2 font-type text-[11px] tracking-wide text-paper/45">{p.repo}</p>
+          <p className="mt-2 font-hud text-[11px] tracking-wide text-paper/45">{p.repo}</p>
           {p.url && (
             <a
               href={p.url}
               target="_blank"
               rel="noreferrer"
-              className="mt-1 font-type text-[11px] uppercase tracking-widest text-cyber underline decoration-dotted hover:text-evidence"
+              className="mt-1 font-hud text-[11px] uppercase tracking-widest text-cyber underline decoration-dotted hover:text-redink"
             >
               {t('panel.open')} ↗
             </a>
@@ -275,10 +277,10 @@ function Testimonials() {
   return (
     <div className="space-y-5">
       {testimonials.map((tm, i) => (
-        <figure key={i} className={`border-l-2 pl-4 ${tm.onRequest ? 'border-paper/20' : 'border-evidence/60'}`}>
+        <figure key={i} className={`border-l-2 pl-4 ${tm.onRequest ? 'border-paper/20' : 'border-redink/60'}`}>
           <blockquote className="font-headline text-[15px] italic leading-relaxed text-paper/85">“{tm.quote}”</blockquote>
           {!tm.onRequest && (
-            <figcaption className="mt-1.5 font-type text-[11px] uppercase tracking-wide text-paper/50">
+            <figcaption className="mt-1.5 font-hud text-[11px] uppercase tracking-wide text-paper/50">
               {tm.org}
               {tm.role ? ` — ${tm.role}` : ''} · {tm.by} · {tm.date}
             </figcaption>

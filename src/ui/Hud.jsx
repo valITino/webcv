@@ -45,19 +45,19 @@ export default function Hud() {
         <LangSwitch dark />
         <button
           onClick={toggleQuality}
-          className="hud-chip transition-colors hover:text-lamp"
+          className="hud-chip transition-colors hover:text-redink"
           title="Toggle visual quality"
         >
           {t('hud.quality')}: {quality === 'high' ? t('quality.high') : t('quality.performance')}
         </button>
-        <button onClick={toggleMuted} className="hud-chip transition-colors hover:text-lamp" title="Toggle sound">
+        <button onClick={toggleMuted} className="hud-chip transition-colors hover:text-redink" title="Toggle sound">
           {t('hud.sound')}: {muted ? 'OFF' : 'ON'}
         </button>
         <div className="flex gap-3">
-          <button onClick={openContact} className="hud-chip transition-colors hover:text-lamp">
+          <button onClick={openContact} className="hud-chip transition-colors hover:text-redink">
             {t('hud.contact')}
           </button>
-          <button onClick={openCredits} className="hud-chip transition-colors hover:text-lamp">
+          <button onClick={openCredits} className="hud-chip transition-colors hover:text-redink">
             {t('hud.credits')}
           </button>
         </div>
@@ -99,5 +99,10 @@ function Corner({ className, d }) {
         : d === 'bl'
           ? 'border-l border-b'
           : 'border-r border-b'
-  return <div className={`pointer-events-none absolute h-5 w-5 border-paper/25 ${borders} ${className}`} />
+  return (
+    <div
+      className={`pointer-events-none absolute h-5 w-5 border-redink/40 ${borders} ${className}`}
+      style={{ filter: 'drop-shadow(0 0 3px rgba(255,42,42,0.4))' }}
+    />
+  )
 }

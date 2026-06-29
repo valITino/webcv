@@ -18,7 +18,7 @@ export default function Cursor() {
     <div ref={wrap} className="pointer-events-none fixed left-0 top-0 z-[60]" style={{ willChange: 'transform' }}>
       <div
         className={`rounded-full border transition-[width,height,border-color] duration-200 ${
-          hovered ? 'h-10 w-10 border-lamp' : 'h-5 w-5 border-paper/60'
+          hovered ? 'h-10 w-10 border-redink' : 'h-5 w-5 border-paper/60'
         }`}
         style={{ transform: 'translate(-50%, -50%)', mixBlendMode: 'difference' }}
       />

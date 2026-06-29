@@ -38,7 +38,7 @@ export default function Overlay({ open, align = 'left', maxW = 'max-w-xl', child
 
           <button
             onClick={close}
-            className="absolute right-5 top-4 z-10 font-type text-[11px] uppercase tracking-[0.18em] text-paper/55 transition-colors hover:text-evidence"
+            className="absolute right-5 top-4 z-10 font-hud text-[11px] uppercase tracking-[0.18em] text-paper/55 transition-colors hover:text-redink"
           >
             {t('panel.close')} ✕
           </button>
@@ -47,9 +47,9 @@ export default function Overlay({ open, align = 'left', maxW = 'max-w-xl', child
 
           {/* SECURE footer + barcode */}
           <div className="flex items-center justify-between gap-4 border-t border-paper/10 bg-black/30 px-7 py-2.5 md:px-10">
-            <span className="font-type text-[10px] uppercase tracking-[0.18em] text-paper/35">
+            <span className="font-hud text-[10px] uppercase tracking-[0.18em] text-paper/35">
               DOC_REF: <span className="text-paper/55">{docRef}</span>{' '}
-              <span className="text-evidence/70">// {t('panel.secure')}</span>
+              <span className="text-redink/70">// {t('panel.secure')}</span>
             </span>
             <span className="barcode hidden sm:block" aria-hidden />
           </div>

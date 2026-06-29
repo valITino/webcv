@@ -6,10 +6,10 @@ export default function LangSwitch({ dark = false }) {
   const { i18n } = useTranslation()
   const current = (i18n.resolvedLanguage || i18n.language || 'en').slice(0, 2)
   const base = dark ? 'text-paper/55' : 'text-ink/50'
-  const active = dark ? 'text-lamp' : 'text-evidence'
+  const active = dark ? 'text-redink' : 'text-evidence'
 
   return (
-    <div className={`flex items-center gap-2 font-type text-[11px] uppercase tracking-[0.18em] ${base}`}>
+    <div className={`flex items-center gap-2 font-hud text-[11px] uppercase tracking-[0.18em] ${base}`}>
       {SUPPORTED.map((lng, i) => (
         <span key={lng} className="flex items-center gap-2">
           {i > 0 && <span className="opacity-40">/</span>}

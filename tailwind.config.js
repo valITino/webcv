@@ -22,6 +22,8 @@ export default {
         type: ['"Special Elite"', '"Courier New"', 'monospace'],
         stencil: ['Oswald', 'Impact', 'sans-serif'],
         ui: ['Inter', 'system-ui', 'sans-serif'],
+        // KH-style HUD / chrome label face — clean geometric sans
+        hud: ['"Rethink Sans"', 'Inter', 'system-ui', 'sans-serif'],
       },
       letterSpacing: {
         ultra: '0.35em',
