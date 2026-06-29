@@ -38,9 +38,9 @@ export default function Lighting() {
       <directionalLight position={[2.6, 2.0, 3.0]} intensity={0.42} color="#6076a0" />
       {/* Warm bounce from the desk */}
       <pointLight position={[0.4, 0.5, 0.8]} intensity={0.5} distance={3} decay={2} color={warm} />
-      {/* Soft wash on the evidence board — kept low so the rich baked texture
-          reads as atmospheric backdrop and the pinned portrait stays the focus */}
-      <pointLight position={[0, 1.4, -0.7]} intensity={0.55} distance={3.2} decay={2} color="#cdbe9a" />
+      {/* Wash on the evidence board so its baked detective art reads as the
+          backdrop behind the pinned portrait (intensity only; geometry verified) */}
+      <pointLight position={[0, 1.4, -0.7]} intensity={0.72} distance={3.2} decay={2} color="#cdbe9a" />
       {/* Gentle rim from the right to lift the coffee / Exhibit F corner */}
       <pointLight position={[1.7, 0.7, 0.9]} intensity={0.45} distance={2.6} decay={2} color={warm} />
 
