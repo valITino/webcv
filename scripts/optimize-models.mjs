@@ -24,12 +24,15 @@ const JOBS = [
   { in: 'board.glb', out: 'board.glb', tex: 2048 },
   { in: 'folder.glb', out: 'folder.glb', tex: 1024 },
   { in: 'coffee.glb', out: 'coffee.glb', tex: 512 },
-  // ── send these next; they'll be picked up here automatically ──
+  { in: 'magnifier.glb', out: 'magnifier.glb', tex: 1024 },
+  { in: 'keys.glb', out: 'keys.glb', tex: 512 },
+  { in: 'vader.glb', out: 'vader.glb', tex: 1024 },
+  { in: 'yoda.glb', out: 'yoda.glb', tex: 1024 },
+  { in: 'supplies.glb', out: 'supplies.glb', tex: 1024 },
+  // ── still to come; picked up automatically once dropped in ──
   { in: 'lamp.glb', out: 'lamp.glb', tex: 1024 },
   { in: 'phone.glb', out: 'phone.glb', tex: 1024 },
   { in: 'monitor.glb', out: 'monitor.glb', tex: 1024 },
-  { in: 'magnifier.glb', out: 'magnifier.glb', tex: 1024 },
-  { in: 'keys.glb', out: 'keys.glb', tex: 512 },
 ]
 
 const kb = (p) => (statSync(p).size / 1024).toFixed(0) + ' KB'

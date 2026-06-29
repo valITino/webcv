@@ -98,6 +98,9 @@ export default {
       magnifier: 'Für die Details, die sich gern verstecken.',
       keys: 'Schlüssel zu irgendwo. Nicht Ihre Sache.',
       portrait: 'Die Zielperson. Lächelnd. Verdächtig.',
+      supplies: 'Büromaterial. Auch Ermittler brauchen Schreibwaren.',
+      vader: 'LEGO Vader. Die dunkle Seite führt bessere Logs.',
+      yoda: 'LEGO Yoda. Geduldig er ist — wie ein guter Ermittler.',
     },
     idle: [
       'Noch da, Herr Inspektor? Der Kaffee ist kalt geworden.',

@@ -1,9 +1,30 @@
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import * as THREE from 'three'
+import { useGLTF, useAnimations } from '@react-three/drei'
 import { PROPS } from '../layout.js'
+import { fit, warmify } from '../utils.js'
 import Interactive from './Interactive.jsx'
 import { useStore } from '../../store/useStore.js'
 import { profile } from '../../data/profile.js'
+
+// Generic loader for a static GLB desk prop: fit + hover-scale + tooltip.
+function GlbProp({ url, cfg, env = 0.3, onClick }) {
+  const { scene } = useGLTF(url)
+  const obj = useMemo(() => {
+    warmify(scene, { env })
+    return scene
+  }, [scene, env])
+  const { scale, position } = useMemo(() => fit(obj, cfg.target, 'bottom'), [obj, cfg.target])
+  return (
+    <Interactive kind={cfg.kind} position={cfg.position} rotation={cfg.rotation} onClick={onClick}>
+      {(hovered) => (
+        <group scale={hovered ? 1.06 : 1}>
+          <primitive object={obj} scale={scale} position={position} />
+        </group>
+      )}
+    </Interactive>
+  )
+}
 
 // ── Shared materials ──────────────────────────────────────
 const brass = { color: '#caa24a', metalness: 0.9, roughness: 0.35 }
@@ -166,63 +187,57 @@ export function Monitor() {
   )
 }
 
-// ── Magnifying glass (decorative inspect tool) ────────────────────────────
+// ── Magnifying glass (GLB) ────────────────────────────────────────────────
 export function Magnifier() {
-  const p = PROPS.magnifier
+  return <GlbProp url="/models/magnifier.glb" cfg={PROPS.magnifier} />
+}
+
+// ── Keys with tag (GLB) ───────────────────────────────────────────────────
+export function Keys() {
+  return <GlbProp url="/models/keys.glb" cfg={PROPS.keys} />
+}
+
+// ── Office supplies pack (GLB) ────────────────────────────────────────────
+export function Supplies() {
+  return <GlbProp url="/models/supplies.glb" cfg={PROPS.supplies} />
+}
+
+// ── LEGO Darth Vader (GLB, static) — personality piece ────────────────────
+export function Vader() {
+  return <GlbProp url="/models/vader.glb" cfg={PROPS.vader} env={0.5} />
+}
+
+// ── LEGO Yoda (GLB, looping idle animation) — personality piece ───────────
+export function Yoda() {
+  const { scene, animations } = useGLTF('/models/yoda.glb')
+  const obj = useMemo(() => {
+    warmify(scene, { env: 0.45 })
+    return scene
+  }, [scene])
+  const { scale, position } = useMemo(() => fit(obj, PROPS.yoda.target, 'bottom'), [obj])
+  const { actions, names } = useAnimations(animations, obj)
+  useEffect(() => {
+    const a = names.length ? actions[names[0]] : null
+    if (!a) return undefined
+    a.reset().fadeIn(0.4).play()
+    a.loop = THREE.LoopRepeat
+    return () => {
+      a.fadeOut(0.2)
+    }
+  }, [actions, names])
   return (
-    <Interactive kind="magnifier" position={p.position} rotation={p.rotation}>
+    <Interactive kind="yoda" position={PROPS.yoda.position} rotation={PROPS.yoda.rotation}>
       {(hovered) => (
-        <group rotation={[-Math.PI / 2.1, 0, 0]} scale={hovered ? 1.06 : 1}>
-          <mesh castShadow>
-            <torusGeometry args={[0.11, 0.012, 16, 40]} />
-            <meshStandardMaterial {...brass} />
-          </mesh>
-          <mesh>
-            <circleGeometry args={[0.1, 40]} />
-            <meshPhysicalMaterial
-              color="#bfe0ee"
-              transmission={0.9}
-              transparent
-              opacity={0.5}
-              roughness={0.05}
-              thickness={0.05}
-            />
-          </mesh>
-          <mesh castShadow position={[0, -0.2, 0]}>
-            <cylinderGeometry args={[0.016, 0.02, 0.2, 16]} />
-            <meshStandardMaterial color="#3a2a18" roughness={0.6} />
-          </mesh>
+        <group scale={hovered ? 1.06 : 1}>
+          <primitive object={obj} scale={scale} position={position} />
         </group>
       )}
     </Interactive>
   )
 }
 
-// ── Keys (decorative) ─────────────────────────────────────────────────────
-export function Keys() {
-  const p = PROPS.keys
-  return (
-    <Interactive kind="keys" position={p.position}>
-      {(hovered) => (
-        <group rotation={[0, 0.4, 0]} scale={hovered ? 1.08 : 1}>
-          <mesh castShadow position={[0, 0.012, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-            <torusGeometry args={[0.035, 0.006, 12, 24]} />
-            <meshStandardMaterial {...brass} />
-          </mesh>
-          {[0.0, 0.35, -0.35].map((a, i) => (
-            <group key={i} rotation={[0, a, 0]}>
-              <mesh castShadow position={[0.07, 0.01, 0]}>
-                <boxGeometry args={[0.11, 0.004, 0.022]} />
-                <meshStandardMaterial color="#b9b2a0" metalness={0.8} roughness={0.4} />
-              </mesh>
-              <mesh castShadow position={[0.135, 0.01, 0.012]}>
-                <boxGeometry args={[0.02, 0.004, 0.01]} />
-                <meshStandardMaterial color="#b9b2a0" metalness={0.8} roughness={0.4} />
-              </mesh>
-            </group>
-          ))}
-        </group>
-      )}
-    </Interactive>
-  )
-}
+useGLTF.preload('/models/magnifier.glb')
+useGLTF.preload('/models/keys.glb')
+useGLTF.preload('/models/supplies.glb')
+useGLTF.preload('/models/vader.glb')
+useGLTF.preload('/models/yoda.glb')

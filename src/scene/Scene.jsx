@@ -7,7 +7,7 @@ import Desk from './objects/Desk.jsx'
 import Board from './objects/Board.jsx'
 import Folder from './objects/Folder.jsx'
 import Coffee from './objects/Coffee.jsx'
-import { Lamp, Phone, Monitor, Magnifier, Keys } from './objects/Props.jsx'
+import { Lamp, Phone, Monitor, Magnifier, Keys, Supplies, Vader, Yoda } from './objects/Props.jsx'
 import BoardPins from './objects/BoardPins.jsx'
 import { FOLDERS } from './layout.js'
 import { useStore } from '../store/useStore.js'
@@ -40,6 +40,9 @@ export default function Scene() {
         <Monitor />
         <Magnifier />
         <Keys />
+        <Supplies />
+        <Vader />
+        <Yoda />
       </group>
 
       {/* dark floor to ground the desk legs + catch the lamp shadow */}

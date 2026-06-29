@@ -8,6 +8,11 @@ export const credits = {
     { ref: 'EX-BOARD-02', name: 'Police Evidence Board', note: 'Backdrop — the pinned exhibits & strings.' },
     { ref: 'EX-FOLDER-03', name: 'Document File Folder', note: 'Case files — one per exhibit.' },
     { ref: 'EX-CUP-04', name: 'Coffee Cup', note: 'Fuel. Older than you’d think.' },
+    { ref: 'EX-GLASS-05', name: 'Magnifying Glass', note: 'For the details that hide.' },
+    { ref: 'EX-KEYS-06', name: 'Key with Tag', note: 'Keys to somewhere undisclosed.' },
+    { ref: 'EX-SUPP-07', name: 'Office Supplies Pack', note: 'Standard-issue stationery.' },
+    { ref: 'EX-FIG-08', name: 'LEGO Darth Vader', note: 'Personal effect. Recovered from the desk.' },
+    { ref: 'EX-FIG-09', name: 'LEGO Yoda (animated)', note: 'Personal effect. Still moving.' },
   ],
   thanks:
     'Concept & art direction inspired by cinematic, object-driven 3D portfolios. Built with React Three Fiber, drei, postprocessing and GSAP.',

@@ -32,11 +32,16 @@ export const FOLDERS = EXHIBITS.map((ex, i) => ({
 
 export const PROPS = {
   coffee: { position: [1.28, 0, 0.5], target: 0.2, kind: 'coffee' },
+  // primitive stand-ins (awaiting GLBs)
   lamp: { position: [-1.42, 0, -0.42], target: 1.0, kind: 'lamp' },
   phone: { position: [-0.98, 0, 0.52], rotation: [0, 0.5, 0], target: 0.34, kind: 'phone' },
   monitor: { position: [0.05, 0, -0.86], rotation: [0, 0, 0], target: 0.95, kind: 'monitor' },
-  magnifier: { position: [0.58, 0.0, 0.62], rotation: [0, 0.6, 0], target: 0.34, kind: 'magnifier' },
-  keys: { position: [-0.42, 0, 0.66], target: 0.2, kind: 'keys' },
+  // real GLB props
+  magnifier: { position: [0.62, 0.0, 0.62], rotation: [0, 0.5, 0], target: 0.34, kind: 'magnifier' },
+  keys: { position: [-0.42, 0, 0.66], rotation: [0, 0.4, 0], target: 0.2, kind: 'keys' },
+  supplies: { position: [-1.5, 0, 0.45], rotation: [0, 0.35, 0], target: 0.46, kind: 'supplies' },
+  yoda: { position: [0.98, 0, 0.52], rotation: [0, -0.35, 0], target: 0.32, kind: 'yoda' },
+  vader: { position: [-0.7, 0, -0.55], rotation: [0, 0.45, 0], target: 0.34, kind: 'vader' },
 }
 
 // Camera poses. CAMERA.overview is the resting desk shot; focus poses frame

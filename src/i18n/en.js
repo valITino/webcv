@@ -98,6 +98,9 @@ export default {
       magnifier: 'For the details that like to hide.',
       keys: 'Keys to somewhere. Not your concern.',
       portrait: 'The subject. Smiling. Suspicious.',
+      supplies: 'Office supplies. Even detectives need stationery.',
+      vader: 'LEGO Vader. The dark side keeps better logs.',
+      yoda: 'LEGO Yoda. Patient, he is — like a good investigator.',
     },
     idle: [
       'Still there, inspector? The coffee’s gone cold.',
