@@ -13,20 +13,30 @@ const FLAGS = { IT: '🇮🇹', RS: '🇷🇸', CH: '🇨🇭', de: '🇩🇪', 
 function Header({ no, code, title }) {
   const { t } = useTranslation()
   return (
-    <div className="mb-6 border-b-2 border-ink/80 pb-4">
-      <div className="flex items-center justify-between font-type text-[10px] uppercase tracking-[0.2em] text-evidence">
-        <span>
+    <div className="mb-7 border-b border-evidence/30 pb-4 pr-20">
+      <div className="flex items-center justify-between font-type text-[10px] uppercase tracking-[0.22em]">
+        <span className="text-evidence">
           {t('panel.exhibit')} — {no}
         </span>
-        <span className="text-ink/50">{code}</span>
+        <span className="text-paper/40">{code}</span>
       </div>
-      <h2 className="mt-1 font-stencil text-3xl font-bold uppercase tracking-tight text-ink md:text-4xl">{title}</h2>
+      <h2 className="mt-2 font-headline text-3xl tracking-tight text-paper md:text-4xl">{title}</h2>
     </div>
   )
 }
 
 function Label({ children }) {
-  return <p className="mb-2 font-type text-[11px] uppercase tracking-[0.2em] text-evidence">{children}</p>
+  return <p className="mb-2 font-type text-[11px] uppercase tracking-[0.22em] text-evidence">{children}</p>
+}
+
+// Red square-numbered serif sub-heading (KH "■01 Mission Log" style).
+function SecHead({ n, children }) {
+  return (
+    <div className="mb-3 flex items-center gap-2.5">
+      <span className="grid h-5 w-5 place-items-center bg-evidence font-type text-[10px] font-bold text-paper">{n}</span>
+      <h3 className="font-headline text-xl text-paper">{children}</h3>
+    </div>
+  )
 }
 
 // ── per-exhibit content ───────────────────────────────────
@@ -34,19 +44,19 @@ function Subject() {
   const { t } = useTranslation()
   const profile = useContent((s) => s.profile)
   return (
-    <div className="space-y-6 text-ink/85">
+    <div className="space-y-6 text-paper/80">
       <div className="flex flex-col gap-5 sm:flex-row">
-        <div className="w-32 shrink-0 border-4 border-ink bg-paperdark p-1">
+        <div className="w-32 shrink-0 border border-paper/20 bg-black/40 p-1">
           <img
             src="/images/portrait.png"
             alt={profile.name}
             className="block w-full"
-            style={{ filter: 'grayscale(1) contrast(1.2) brightness(0.95) sepia(0.15)' }}
+            style={{ filter: 'grayscale(1) contrast(1.15) brightness(0.92)' }}
           />
-          <p className="bg-ink py-0.5 text-center font-type text-[8px] tracking-widest text-paper">{profile.caseNo}</p>
+          <p className="bg-evidence py-0.5 text-center font-type text-[8px] tracking-widest text-paper">{profile.caseNo}</p>
         </div>
         <div className="font-ui text-sm">
-          <p className="font-headline text-2xl text-ink">{profile.name}</p>
+          <p className="font-headline text-2xl text-paper">{profile.name}</p>
           <p className="font-type text-xs uppercase tracking-[0.2em] text-evidence">{profile.title}</p>
           <dl className="mt-3 space-y-1.5">
             <Row k={t('panel.current')} v={`${profile.current.org} · ${profile.current.period}`} />
@@ -62,9 +72,9 @@ function Subject() {
         <ul className="space-y-1.5 font-ui text-sm">
           {profile.languages.map((l) => (
             <li key={l.lang} className="flex flex-wrap items-baseline gap-x-2">
-              <span className="font-semibold text-ink">{l.lang}</span>
+              <span className="font-semibold text-paper">{l.lang}</span>
               <span className="font-type text-[11px] uppercase tracking-widest text-evidence">{l.level}</span>
-              <span className="italic text-ink/60">{l.exhibit}</span>
+              <span className="italic text-paper/50">{l.exhibit}</span>
             </li>
           ))}
         </ul>
@@ -74,7 +84,7 @@ function Subject() {
         <Label>{t('panel.hobbies')}</Label>
         <div className="flex flex-wrap gap-2">
           {profile.hobbies.map((h) => (
-            <span key={h} className="border border-ink/30 px-2 py-1 font-type text-[11px] text-ink/70">
+            <span key={h} className="chip">
               {h}
             </span>
           ))}
@@ -84,11 +94,11 @@ function Subject() {
       <div className="border-l-2 border-evidence/60 pl-4">
         <Label>{t('panel.statement')}</Label>
         {profile.manifesto.map((p, i) => (
-          <p key={i} className="mb-3 font-headline text-[15px] italic leading-relaxed text-ink/80">
+          <p key={i} className="mb-3 font-headline text-[15px] italic leading-relaxed text-paper/75">
             {p}
           </p>
         ))}
-        <p className="text-right font-type text-xs tracking-widest text-ink/60">{profile.manifestoSign}</p>
+        <p className="text-right font-type text-xs tracking-widest text-paper/50">{profile.manifestoSign}</p>
       </div>
     </div>
   )
@@ -97,19 +107,19 @@ function Subject() {
 function Row({ k, v }) {
   return (
     <div className="flex gap-3">
-      <dt className="w-20 shrink-0 font-type text-[11px] uppercase tracking-widest text-ink/45">{k}</dt>
-      <dd className="text-ink/85">{v}</dd>
+      <dt className="w-20 shrink-0 font-type text-[11px] uppercase tracking-widest text-paper/40">{k}</dt>
+      <dd className="text-paper/80">{v}</dd>
     </div>
   )
 }
 
 function SkillGroup({ group, items }) {
   return (
-    <div className="mb-4 break-inside-avoid">
-      <p className="mb-1.5 font-stencil text-sm font-semibold uppercase tracking-wide text-ink">{group}</p>
-      <ul className="space-y-1">
+    <div className="mb-5 break-inside-avoid">
+      <p className="mb-2 font-type text-[11px] uppercase tracking-[0.18em] text-evidence">{group}</p>
+      <ul className="space-y-1.5">
         {items.map(([name, val]) => (
-          <li key={name} className="flex items-center justify-between gap-3 text-[13px] text-ink/80">
+          <li key={name} className="flex items-center justify-between gap-3 text-[13px] text-paper/80">
             <span>{name}</span>
             <Stars value={val} />
           </li>
@@ -134,7 +144,7 @@ function Skills() {
             key={id}
             onClick={() => setTab(id)}
             className={`px-4 py-1.5 font-type text-[11px] uppercase tracking-[0.18em] transition-colors ${
-              tab === id ? 'bg-ink text-paper' : 'border border-ink/30 text-ink/60 hover:border-ink/60'
+              tab === id ? 'bg-evidence text-paper' : 'border border-paper/25 text-paper/60 hover:border-paper/50'
             }`}
           >
             {lbl}
@@ -152,12 +162,12 @@ function Skills() {
 
 function Record() {
   return (
-    <ol className="relative space-y-5 border-l-2 border-ink/25 pl-5">
+    <ol className="relative space-y-6 border-l border-paper/15 pl-5">
       {experience.map((e, i) => (
         <li key={i} className="relative">
-          <span className="absolute -left-[27px] top-1.5 h-3 w-3 rounded-full border-2 border-paper bg-evidence" />
+          <span className="absolute -left-[27px] top-1.5 h-3 w-3 rounded-full border-2 border-ink bg-evidence" />
           <div className="flex flex-wrap items-baseline justify-between gap-x-3">
-            <h3 className="font-stencil text-lg font-semibold uppercase text-ink">{e.role}</h3>
+            <h3 className="font-headline text-lg text-paper">{e.role}</h3>
             {e.current && (
               <span className="border border-evidence px-1.5 py-0.5 font-type text-[9px] uppercase tracking-widest text-evidence">
                 ACTIVE
@@ -165,9 +175,9 @@ function Record() {
             )}
           </div>
           <p className="font-type text-[12px] uppercase tracking-wide text-evidence/90">
-            {e.org} · {e.period}
+            <span className="text-evidence">»</span> {e.org} · {e.period}
           </p>
-          <ul className="mt-1.5 list-disc space-y-0.5 pl-4 text-[13px] text-ink/75">
+          <ul className="mt-1.5 list-disc space-y-0.5 pl-4 text-[13px] text-paper/70 marker:text-paper/30">
             {e.points.map((p, j) => (
               <li key={j}>{p}</li>
             ))}
@@ -182,18 +192,18 @@ function Credentials() {
   const { t } = useTranslation()
   const badge = { 'in-progress': t('panel.inProgress'), completed: t('panel.completed'), planned: t('panel.planned') }
   return (
-    <div className="space-y-7">
+    <div className="space-y-8">
       <div>
-        <Label>{t('panel.certificates')}</Label>
+        <SecHead n="01">{t('panel.certificates')}</SecHead>
         <ul className="space-y-3">
           {certificates.map((c, i) => (
-            <li key={i} className="border-l-2 border-ink/20 pl-3">
+            <li key={i} className="border-l border-paper/15 pl-3">
               <div className="flex flex-wrap items-baseline justify-between gap-x-3">
-                <h4 className="font-semibold text-ink">{c.title}</h4>
-                <span className="font-type text-[11px] tracking-wide text-ink/50">{c.date}</span>
+                <h4 className="font-semibold text-paper">{c.title}</h4>
+                <span className="font-type text-[11px] tracking-wide text-paper/45">{c.date}</span>
               </div>
               <p className="font-type text-[11px] uppercase tracking-wide text-evidence/90">{c.issuer}</p>
-              {c.detail && <p className="mt-0.5 text-[12px] leading-snug text-ink/70">{c.detail}</p>}
+              {c.detail && <p className="mt-0.5 text-[12px] leading-snug text-paper/65">{c.detail}</p>}
               {c.verify && (
                 <a
                   href={`https://${c.verify}`}
@@ -209,20 +219,20 @@ function Credentials() {
         </ul>
       </div>
       <div>
-        <Label>{t('panel.education')}</Label>
+        <SecHead n="02">{t('panel.education')}</SecHead>
         <ul className="space-y-3">
           {education.map((e, i) => (
-            <li key={i} className="border-l-2 border-ink/20 pl-3">
+            <li key={i} className="border-l border-paper/15 pl-3">
               <div className="flex flex-wrap items-baseline justify-between gap-x-3">
-                <h4 className="font-semibold text-ink">{e.program}</h4>
-                <span className="border border-ink/30 px-1.5 font-type text-[9px] uppercase tracking-widest text-ink/55">
+                <h4 className="font-semibold text-paper">{e.program}</h4>
+                <span className="border border-paper/25 px-1.5 font-type text-[9px] uppercase tracking-widest text-paper/55">
                   {badge[e.status] || e.status}
                 </span>
               </div>
               <p className="font-type text-[11px] uppercase tracking-wide text-evidence/90">
                 {e.school} · {e.period}
               </p>
-              {e.detail && <p className="mt-0.5 text-[12px] leading-snug text-ink/70">{e.detail}</p>}
+              {e.detail && <p className="mt-0.5 text-[12px] leading-snug text-paper/65">{e.detail}</p>}
             </li>
           ))}
         </ul>
@@ -236,13 +246,15 @@ function Cases() {
   return (
     <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
       {projects.map((p, i) => (
-        <div key={i} className="flex flex-col border border-ink/20 bg-paper/40 p-3">
+        <div key={i} className="flex flex-col border border-paper/15 bg-paper/[0.03] p-3.5">
           <div className="mb-1 flex items-baseline justify-between gap-2">
-            <h4 className="font-stencil text-base font-semibold uppercase text-ink">{p.name}</h4>
-            <span className="font-type text-[9px] uppercase tracking-widest text-ink/40">{String(i + 1).padStart(2, '0')}</span>
+            <h4 className="font-headline text-base text-paper">{p.name}</h4>
+            <span className="font-type text-[9px] uppercase tracking-widest text-evidence/70">
+              {String(i + 1).padStart(2, '0')}
+            </span>
           </div>
-          <p className="flex-1 text-[12px] leading-snug text-ink/75">{p.blurb}</p>
-          <p className="mt-2 font-type text-[11px] tracking-wide text-ink/50">{p.repo}</p>
+          <p className="flex-1 text-[12px] leading-snug text-paper/70">{p.blurb}</p>
+          <p className="mt-2 font-type text-[11px] tracking-wide text-paper/45">{p.repo}</p>
           {p.url && (
             <a
               href={p.url}
@@ -261,15 +273,12 @@ function Cases() {
 
 function Testimonials() {
   return (
-    <div className="space-y-4">
+    <div className="space-y-5">
       {testimonials.map((tm, i) => (
-        <figure
-          key={i}
-          className={`border-l-4 pl-4 ${tm.onRequest ? 'border-ink/30' : 'border-evidence/60'}`}
-        >
-          <blockquote className="font-headline text-[15px] italic leading-relaxed text-ink/85">“{tm.quote}”</blockquote>
+        <figure key={i} className={`border-l-2 pl-4 ${tm.onRequest ? 'border-paper/20' : 'border-evidence/60'}`}>
+          <blockquote className="font-headline text-[15px] italic leading-relaxed text-paper/85">“{tm.quote}”</blockquote>
           {!tm.onRequest && (
-            <figcaption className="mt-1.5 font-type text-[11px] uppercase tracking-wide text-ink/55">
+            <figcaption className="mt-1.5 font-type text-[11px] uppercase tracking-wide text-paper/50">
               {tm.org}
               {tm.role ? ` — ${tm.role}` : ''} · {tm.by} · {tm.date}
             </figcaption>

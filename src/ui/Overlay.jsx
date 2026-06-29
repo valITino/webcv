@@ -1,12 +1,16 @@
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useStore } from '../store/useStore.js'
+import { useContent } from '../store/useContent.js'
 
-// Shared overlay shell: dim backdrop, Esc-to-close, and a docked paper sheet.
-// `align` controls which side the sheet docks to so the 3D focus stays visible.
+// Shared overlay shell: dimmed backdrop, Esc-to-close, and a docked dark
+// "dossier" panel framed by red HUD corner brackets with a SECURE/barcode
+// footer. `align` controls which side the panel docks so the 3D focus stays
+// visible behind it.
 export default function Overlay({ open, align = 'left', maxW = 'max-w-xl', children }) {
   const { t } = useTranslation()
   const close = useStore((s) => s.closeOverlay)
+  const profile = useContent((s) => s.profile)
 
   useEffect(() => {
     if (!open) return undefined
@@ -17,30 +21,37 @@ export default function Overlay({ open, align = 'left', maxW = 'max-w-xl', child
 
   if (!open) return null
   const justify = align === 'right' ? 'justify-end' : align === 'center' ? 'justify-center' : 'justify-start'
+  const docRef = `CV_2026_${(profile.name || '').toUpperCase().replace(/\s+/g, '-')}`
 
   return (
     <div className="fixed inset-0 z-30">
-      <div className="absolute inset-0 bg-ink/55 backdrop-blur-[2px]" onClick={close} />
+      <div className="absolute inset-0 bg-black/72 backdrop-blur-[3px]" onClick={close} />
       <div className={`pointer-events-none absolute inset-0 flex ${justify} p-4 md:p-8`}>
         <div
-          className={`pointer-events-auto relative my-auto flex max-h-[90vh] w-full ${maxW} flex-col overflow-hidden paper grain animate-[stampin_0.01s] rounded-[2px]`}
-          style={{ animation: 'none' }}
+          className={`dossier scroll-thin pointer-events-auto relative my-auto flex max-h-[90vh] w-full ${maxW} flex-col overflow-hidden rounded-[2px]`}
         >
-          {/* tape strips */}
-          <div className="pointer-events-none absolute -left-4 top-6 h-7 w-24 -rotate-12 bg-paperdark/50 mix-blend-multiply" />
-          <div className="pointer-events-none absolute -right-5 bottom-10 h-7 w-24 rotate-6 bg-paperdark/50 mix-blend-multiply" />
+          {/* red HUD corner brackets */}
+          <span className="hud-corner left-2 top-2 border-l-2 border-t-2" />
+          <span className="hud-corner right-2 top-2 border-r-2 border-t-2" />
+          <span className="hud-corner bottom-2 left-2 border-b-2 border-l-2" />
+          <span className="hud-corner bottom-2 right-2 border-b-2 border-r-2" />
 
           <button
             onClick={close}
-            className="absolute right-3 top-3 z-10 font-type text-[11px] uppercase tracking-[0.18em] text-ink/60 hover:text-evidence"
+            className="absolute right-5 top-4 z-10 font-type text-[11px] uppercase tracking-[0.18em] text-paper/55 transition-colors hover:text-evidence"
           >
             {t('panel.close')} ✕
           </button>
 
-          <div className="scroll-thin overflow-y-auto px-7 py-8 md:px-10 md:py-10">{children}</div>
+          <div className="scroll-thin overflow-y-auto px-7 py-8 md:px-10 md:py-9">{children}</div>
 
-          <div className="border-t border-ink/15 px-7 py-2 text-center font-type text-[10px] uppercase tracking-[0.2em] text-ink/40">
-            {t('panel.closeHint')}
+          {/* SECURE footer + barcode */}
+          <div className="flex items-center justify-between gap-4 border-t border-paper/10 bg-black/30 px-7 py-2.5 md:px-10">
+            <span className="font-type text-[10px] uppercase tracking-[0.18em] text-paper/35">
+              DOC_REF: <span className="text-paper/55">{docRef}</span>{' '}
+              <span className="text-evidence/70">// {t('panel.secure')}</span>
+            </span>
+            <span className="barcode hidden sm:block" aria-hidden />
           </div>
         </div>
       </div>

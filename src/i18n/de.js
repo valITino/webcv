@@ -50,6 +50,7 @@ export default {
       exhibit: 'BEWEISSTÜCK',
       close: 'AKTE SCHLIESSEN',
       closeHint: 'Esc zum Schliessen',
+      secure: 'GESICHERT',
       languages: 'SPRACHEN',
       hobbies: 'BEKANNTE GEWOHNHEITEN',
       nationalities: 'STAATSANGEHÖRIGKEITEN',

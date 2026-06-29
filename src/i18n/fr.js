@@ -50,6 +50,7 @@ export default {
       exhibit: 'PIÈCE À CONVICTION',
       close: 'FERMER LE DOSSIER',
       closeHint: 'Échap pour fermer',
+      secure: 'SÉCURISÉ',
       languages: 'LANGUES',
       hobbies: 'HABITUDES CONNUES',
       nationalities: 'NATIONALITÉS',

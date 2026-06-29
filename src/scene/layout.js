@@ -43,18 +43,14 @@ export const PROPS = {
   vader: { position: [-0.7, 0, -0.55], rotation: [0, 0.45, 0], target: 0.34, kind: 'vader' },
 }
 
-// When a folder is examined it lifts off the desk to this "stage" in front of
-// the camera (biased right so the document panel can dock left), and slowly
-// rotates — the reference's pick-up-and-inspect interaction.
-export const STAGE = { position: [1.0, 1.18, 1.95], scale: 2.2, tilt: -0.3 }
-
-// Camera poses. CAMERA.overview is the resting desk shot; focus poses frame
-// each interactive target while the document panel is docked to one side.
+// Camera poses. CAMERA.overview is the resting desk shot — low and across the
+// desk (sitting-at-the-desk intimacy, matching the reference). A clicked folder
+// opens flat in place and the camera dives toward it from the front/above.
 export const CAMERA = {
-  overview: { pos: [0, 1.7, 3.7], target: [0, 0.32, -0.35] },
-  inspect: { pos: [0.05, 1.32, 3.35], target: [0.82, 1.12, 1.88] }, // frames the stage (right of panel)
-  phone: { pos: [-0.2, 0.78, 1.5], target: [-0.98, 0.02, 0.52] },
-  board: { pos: [0.1, 0.95, 2.25], target: [0, 0.7, -1.4] },
+  overview: { pos: [0, 0.6, 2.35], target: [0, 0.02, -0.85] },
+  folder: (x, z) => ({ pos: [x * 0.4, 0.66, z + 1.18], target: [x, 0.0, z + 0.05] }),
+  phone: { pos: [-0.35, 0.6, 1.35], target: [-0.98, 0.02, 0.52] },
+  board: { pos: [0.05, 0.95, 1.95], target: [0, 0.7, -1.5] },
 }
 
 export function focusPose(focus) {
@@ -62,6 +58,6 @@ export function focusPose(focus) {
   if (focus === 'phone') return CAMERA.phone
   if (focus === 'board') return CAMERA.board
   const f = FOLDERS.find((x) => x.id === focus)
-  if (f) return CAMERA.inspect // folder flies to the stage; camera frames it
+  if (f) return CAMERA.folder(f.position[0], f.position[2]) // dive to the opened folder
   return CAMERA.overview
 }

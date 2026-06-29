@@ -5,9 +5,9 @@ import Overlay from './Overlay.jsx'
 
 function Line({ k, children }) {
   return (
-    <div className="flex items-center gap-3 border-b border-ink/15 py-2.5">
+    <div className="flex items-center gap-3 border-b border-paper/10 py-2.5">
       <span className="w-20 shrink-0 font-type text-[11px] uppercase tracking-[0.18em] text-evidence">{k}</span>
-      <span className="font-ui text-sm text-ink/85">{children}</span>
+      <span className="font-ui text-sm text-paper/85">{children}</span>
     </div>
   )
 }
@@ -18,12 +18,12 @@ export default function ContactTerminal() {
   const overlay = useStore((s) => s.overlay)
   return (
     <Overlay open={overlay === 'contact'} align="right" maxW="max-w-lg">
-      <div className="mb-5 border-b-2 border-ink/80 pb-4">
-        <p className="font-type text-[10px] uppercase tracking-[0.2em] text-evidence">{t('contact.ref')}</p>
-        <h2 className="mt-1 font-stencil text-3xl font-bold uppercase tracking-tight text-ink">{t('contact.title')}</h2>
+      <div className="mb-5 border-b border-evidence/30 pb-4 pr-20">
+        <p className="font-type text-[10px] uppercase tracking-[0.22em] text-evidence">{t('contact.ref')}</p>
+        <h2 className="mt-1 font-headline text-3xl tracking-tight text-paper">{t('contact.title')}</h2>
       </div>
 
-      <p className="mb-5 font-headline text-[15px] italic leading-relaxed text-ink/75">{t('contact.voicemail')}</p>
+      <p className="mb-5 font-headline text-[15px] italic leading-relaxed text-paper/70">{t('contact.voicemail')}</p>
 
       <div className="mb-6">
         <Line k={t('contact.email')}>
@@ -49,9 +49,9 @@ export default function ContactTerminal() {
         </Line>
       </div>
 
-      <div className="flex items-center gap-2 border border-[#42f59b]/40 bg-[#42f59b]/5 px-3 py-2">
+      <div className="flex items-center gap-2 border border-[#42f59b]/40 bg-[#42f59b]/[0.06] px-3 py-2">
         <span className="inline-block h-2 w-2 animate-pulse rounded-full bg-[#42f59b]" />
-        <p className="font-type text-[12px] tracking-wide text-ink/75">{t('contact.availability')}</p>
+        <p className="font-type text-[12px] tracking-wide text-paper/80">{t('contact.availability')}</p>
       </div>
     </Overlay>
   )

@@ -30,7 +30,7 @@ export default function Experience() {
         shadows
         dpr={[1, quality === 'high' ? 2 : 1.3]}
         gl={{ antialias: true, powerPreference: 'high-performance' }}
-        camera={{ position: [0, 1.55, 3.55], fov: 38, near: 0.1, far: 100 }}
+        camera={{ position: [0, 0.6, 2.35], fov: 42, near: 0.1, far: 100 }}
       >
         <color attach="background" args={['#0c0b09']} />
         <fog attach="fog" args={['#0c0b09', 5.5, 14]} />

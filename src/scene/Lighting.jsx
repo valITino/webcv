@@ -35,9 +35,9 @@ export default function Lighting() {
       {/* Local glow at the lamp head (sells "the lamp is on" + feeds bloom) */}
       <pointLight position={[-1.02, 0.62, -0.02]} color={key} intensity={glow} distance={1.5} decay={2} />
 
-      {/* Stage light — lifts the examined folder out of shadow (only while inspecting) */}
+      {/* Reading light — illuminates the opened folder on the desk (while inspecting) */}
       {inspecting && (
-        <pointLight position={[1.0, 1.5, 2.3]} color="#fff0d4" intensity={3.2} distance={3} decay={2} />
+        <pointLight position={[0, 1.05, 0.6]} color="#fff0d4" intensity={2.6} distance={2.6} decay={2} />
       )}
 
       {/* Cool fill so the front + right side of objects read */}

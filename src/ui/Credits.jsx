@@ -8,29 +8,27 @@ export default function Credits() {
   const overlay = useStore((s) => s.overlay)
   return (
     <Overlay open={overlay === 'credits'} align="center" maxW="max-w-lg">
-      <div className="mb-5 border-b-2 border-ink/80 pb-4">
-        <p className="font-type text-[10px] uppercase tracking-[0.2em] text-evidence">{t('credits.ref')}</p>
-        <h2 className="mt-1 font-stencil text-2xl font-bold uppercase tracking-tight text-ink md:text-3xl">
-          {t('credits.title')}
-        </h2>
+      <div className="mb-5 border-b border-evidence/30 pb-4 pr-20">
+        <p className="font-type text-[10px] uppercase tracking-[0.22em] text-evidence">{t('credits.ref')}</p>
+        <h2 className="mt-1 font-headline text-2xl tracking-tight text-paper md:text-3xl">{t('credits.title')}</h2>
       </div>
 
-      <p className="mb-5 text-[13px] leading-relaxed text-ink/75">{credits.intro}</p>
+      <p className="mb-5 text-[13px] leading-relaxed text-paper/70">{credits.intro}</p>
 
       <ul className="mb-6 space-y-2">
         {credits.assets.map((a) => (
-          <li key={a.ref} className="flex gap-3 border-b border-ink/15 pb-2">
-            <span className="w-24 shrink-0 font-type text-[11px] uppercase tracking-wide text-ink/45">{a.ref}</span>
-            <span className="flex-1 text-[13px] text-ink/85">
-              <span className="font-semibold text-ink">{a.name}</span> — {a.note}
+          <li key={a.ref} className="flex gap-3 border-b border-paper/10 pb-2">
+            <span className="w-24 shrink-0 font-type text-[11px] uppercase tracking-wide text-paper/40">{a.ref}</span>
+            <span className="flex-1 text-[13px] text-paper/85">
+              <span className="font-semibold text-paper">{a.name}</span> — {a.note}
             </span>
           </li>
         ))}
       </ul>
 
-      <p className="font-type text-[10px] uppercase tracking-[0.2em] text-evidence">{t('credits.thanksTitle')}</p>
-      <p className="mt-2 text-[12px] leading-relaxed text-ink/65">{credits.thanks}</p>
-      <p className="mt-4 text-center font-type text-[11px] uppercase tracking-[0.2em] text-ink/40">{credits.build}</p>
+      <p className="font-type text-[10px] uppercase tracking-[0.22em] text-evidence">{t('credits.thanksTitle')}</p>
+      <p className="mt-2 text-[12px] leading-relaxed text-paper/65">{credits.thanks}</p>
+      <p className="mt-4 text-center font-type text-[11px] uppercase tracking-[0.2em] text-paper/40">{credits.build}</p>
     </Overlay>
   )
 }

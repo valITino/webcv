@@ -79,6 +79,47 @@ body {
     @apply font-ui text-[10px] tracking-[0.22em] uppercase text-paper/70;
   }
 
+  /* KH-style dark "dossier" panel — near-black, faint red inner ring */
+  .dossier {
+    background:
+      radial-gradient(120% 80% at 50% 0%, rgba(192, 57, 43, 0.06), transparent 60%),
+      linear-gradient(180deg, rgba(17, 15, 12, 0.97), rgba(8, 7, 6, 0.985));
+    color: #e8e2d4;
+    box-shadow:
+      0 40px 90px -28px rgba(0, 0, 0, 0.92),
+      inset 0 0 0 1px rgba(192, 57, 43, 0.18),
+      inset 0 0 80px rgba(0, 0, 0, 0.5);
+  }
+
+  /* Red L-shaped HUD corner bracket (positioned per-corner via utilities) */
+  .hud-corner {
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    border-color: rgba(192, 57, 43, 0.85);
+    pointer-events: none;
+  }
+
+  /* Printed barcode strip (footer of every dossier) */
+  .barcode {
+    height: 16px;
+    width: 132px;
+    opacity: 0.55;
+    background-image: repeating-linear-gradient(
+      90deg,
+      #e8e2d4 0 1px, transparent 1px 3px,
+      #e8e2d4 3px 5px, transparent 5px 6px,
+      #e8e2d4 6px 9px, transparent 9px 11px,
+      #e8e2d4 11px 12px, transparent 12px 15px
+    );
+  }
+
+  /* Bordered skill / tag chip on the dark dossier */
+  .chip {
+    @apply inline-flex items-center border border-paper/25 bg-paper/[0.03] px-2.5 py-1
+           font-type text-[11px] tracking-wide text-paper/80;
+  }
+
   /* Red evidence stamp */
   .stamp {
     border: 3px solid rgba(192, 57, 43, 0.85);

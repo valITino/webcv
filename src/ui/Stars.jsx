@@ -6,7 +6,7 @@ export default function Stars({ value = 0 }) {
   return (
     <span className="inline-flex items-center gap-[2px] align-middle">
       {Array.from({ length: 5 }).map((_, i) => (
-        <span key={i} className={i < full ? 'text-evidence' : 'text-ink/20'} style={{ fontSize: 13, lineHeight: 1 }}>
+        <span key={i} className={i < full ? 'text-evidence' : 'text-paper/20'} style={{ fontSize: 13, lineHeight: 1 }}>
           ★
         </span>
       ))}
