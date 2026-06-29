@@ -7,8 +7,8 @@ import { profile } from '../../data/profile.js'
 // Items pinned to the evidence board: the wanted poster (subject photo),
 // a couple of note cards, pushpins and red string. Positioned in the board's
 // front plane; the whole group can be nudged via POS.
-const POS = [0, 1.2, -1.66] // centre of the board face (tuned against the model)
-const SCALE = 1.5
+const POS = [0, 1.0, -1.62] // centre of the board face (tuned against the model)
+const SCALE = 1.3
 
 function makeNote(lines, accent = '#1a160e') {
   const c = document.createElement('canvas')

@@ -114,6 +114,8 @@ export default {
       coffee: 'Nachschub verweigert. Die Ermittlung geht weiter.',
       yoda: 'Hmm. Die Timeline lesen, du musst.',
       vader: 'Die dunkle Seite führt tadellose Logs.',
+      lampon: 'Es werde Licht.',
+      lampoff: 'Licht aus — mutig, Herr Inspektor.',
     },
   },
 }

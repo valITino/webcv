@@ -16,6 +16,8 @@ export default function Hud() {
   const openCredits = useStore((s) => s.openCredits)
   const quality = useStore((s) => s.quality)
   const toggleQuality = useStore((s) => s.toggleQuality)
+  const muted = useStore((s) => s.muted)
+  const toggleMuted = useStore((s) => s.toggleMuted)
 
   return (
     <div className="pointer-events-none fixed inset-0 z-20 select-none font-ui">
@@ -46,6 +48,9 @@ export default function Hud() {
           title="Toggle visual quality"
         >
           {t('hud.quality')}: {quality === 'high' ? t('quality.high') : t('quality.performance')}
+        </button>
+        <button onClick={toggleMuted} className="hud-chip transition-colors hover:text-lamp" title="Toggle sound">
+          {t('hud.sound')}: {muted ? 'OFF' : 'ON'}
         </button>
         <div className="flex gap-3">
           <button onClick={openContact} className="hud-chip transition-colors hover:text-lamp">

@@ -1,4 +1,5 @@
 import { create } from 'zustand'
+import * as sound from '../sound.js'
 
 // Single source of truth for the experience.
 // `focus` drives the camera rig; `overlay` + `activeExhibit` drive the DOM panels.
@@ -10,16 +11,28 @@ export const useStore = create((set, get) => ({
 
   setProgress: (p) => set({ progress: Math.max(get().progress, p) }),
   setReady: (b = true) => set({ ready: b }),
-  enter: () => set({ entered: true }),
+  enter: () => {
+    sound.resume() // prime audio on the entering click (user gesture)
+    set({ entered: true })
+  },
 
   // ── navigation ──────────────────────────────────────────
   overlay: null, // null | 'exhibit' | 'contact' | 'credits'
   activeExhibit: null, // exhibit id when overlay === 'exhibit'
   focus: null, // camera focus target id (exhibit id | 'phone' | 'board' | null)
 
-  openExhibit: (id) => set({ overlay: 'exhibit', activeExhibit: id, focus: id }),
-  openContact: () => set({ overlay: 'contact', activeExhibit: null, focus: 'phone' }),
-  openCredits: () => set({ overlay: 'credits', activeExhibit: null, focus: 'board' }),
+  openExhibit: (id) => {
+    if (!get().muted) sound.tick()
+    set({ overlay: 'exhibit', activeExhibit: id, focus: id })
+  },
+  openContact: () => {
+    if (!get().muted) sound.tick()
+    set({ overlay: 'contact', activeExhibit: null, focus: 'phone' })
+  },
+  openCredits: () => {
+    if (!get().muted) sound.tick()
+    set({ overlay: 'credits', activeExhibit: null, focus: 'board' })
+  },
   closeOverlay: () => set({ overlay: null, activeExhibit: null, focus: null }),
 
   // ── hover / tooltip ─────────────────────────────────────
@@ -31,7 +44,15 @@ export const useStore = create((set, get) => ({
   toggleQuality: () => set({ quality: get().quality === 'high' ? 'performance' : 'high' }),
 
   muted: true,
-  toggleMuted: () => set({ muted: !get().muted }),
+  toggleMuted: () => {
+    const m = !get().muted
+    set({ muted: m })
+    sound.setMuted(m)
+  },
+
+  // ── lamp (clickable: toggles the key light, KH-style "burn out") ─────────
+  lampOn: true,
+  toggleLamp: () => set({ lampOn: !get().lampOn }),
 
   // ── easter eggs ─────────────────────────────────────────
   ravenclaw: false, // Konami code → house-colours light + crest

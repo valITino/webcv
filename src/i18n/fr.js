@@ -114,6 +114,8 @@ export default {
       coffee: 'Recharge refusée. L’enquête continue.',
       yoda: 'Hmm. La chronologie, lire tu dois.',
       vader: 'Le côté obscur tient des journaux impeccables.',
+      lampon: 'Que la lumière soit.',
+      lampoff: 'Extinction des feux — audacieux, inspecteur.',
     },
   },
 }

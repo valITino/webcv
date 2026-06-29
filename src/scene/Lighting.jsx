@@ -6,8 +6,11 @@ import { useStore } from '../store/useStore.js'
 // reflections. Konami → Ravenclaw mode flips the warm palette to house blue/bronze.
 export default function Lighting() {
   const ravenclaw = useStore((s) => s.ravenclaw)
+  const lampOn = useStore((s) => s.lampOn)
   const key = ravenclaw ? '#5b8bd0' : '#ffebb3' // lamp key light
   const warm = ravenclaw ? '#cd7f32' : '#e7b87a' // warm bounce / rim → bronze in RC mode
+  const keyIntensity = lampOn ? (ravenclaw ? 20 : 16) : 0 // clicking the lamp burns it out
+  const glow = lampOn ? 1.3 : 0
 
   return (
     <>
@@ -18,7 +21,7 @@ export default function Lighting() {
         position={[-1.05, 1.0, -0.05]}
         target-position={[0.1, 0, 0.22]}
         color={key}
-        intensity={ravenclaw ? 20 : 16}
+        intensity={keyIntensity}
         angle={0.74}
         penumbra={0.65}
         distance={9}
@@ -29,14 +32,15 @@ export default function Lighting() {
         shadow-normalBias={0.02}
       />
       {/* Local glow at the lamp head (sells "the lamp is on" + feeds bloom) */}
-      <pointLight position={[-1.02, 0.62, -0.02]} color={key} intensity={1.3} distance={1.5} decay={2} />
+      <pointLight position={[-1.02, 0.62, -0.02]} color={key} intensity={glow} distance={1.5} decay={2} />
 
       {/* Cool fill so the front + right side of objects read */}
       <directionalLight position={[2.6, 2.0, 3.0]} intensity={0.42} color="#6076a0" />
       {/* Warm bounce from the desk */}
       <pointLight position={[0.4, 0.5, 0.8]} intensity={0.5} distance={3} decay={2} color={warm} />
-      {/* Soft wash on the evidence board so its texture + pinned items read */}
-      <pointLight position={[0, 1.5, -0.7]} intensity={0.85} distance={3.4} decay={2} color="#cdbe9a" />
+      {/* Soft wash on the evidence board — kept low so the rich baked texture
+          reads as atmospheric backdrop and the pinned portrait stays the focus */}
+      <pointLight position={[0, 1.4, -0.7]} intensity={0.55} distance={3.2} decay={2} color="#cdbe9a" />
       {/* Gentle rim from the right to lift the coffee / Exhibit F corner */}
       <pointLight position={[1.7, 0.7, 0.9]} intensity={0.45} distance={2.6} decay={2} color={warm} />
 

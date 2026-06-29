@@ -5,11 +5,11 @@ import { EXHIBITS } from '../data/registry.js'
 export const DESK = { target: 3.7, anchor: 'top' }
 
 export const BOARD = {
-  // The board's flat face points along X in the source model → rotate 90° on Y
-  // so the large face turns toward the camera as a backdrop behind the desk.
-  position: [0, 0.04, -1.7],
-  rotation: [0, Math.PI / 2, 0],
-  target: 3.5,
+  // The board's detective texture sits on its +X face → rotate -90° on Y so the
+  // FRONT face turns toward the camera (else the baked text renders mirrored).
+  position: [0, 0.05, -1.66],
+  rotation: [0, -Math.PI / 2, 0],
+  target: 3.0,
   anchor: 'bottom',
 }
 
@@ -36,8 +36,7 @@ export const PROPS = {
   lamp: { position: [-1.3, 0, -0.32], rotation: [0, 0.5, 0], target: 0.62, kind: 'lamp' },
   phone: { position: [-1.0, 0, 0.5], rotation: [0, 0.6, 0], target: 0.34, kind: 'phone' },
   magnifier: { position: [0.62, 0.0, 0.62], rotation: [0, 0.5, 0], target: 0.34, kind: 'magnifier' },
-  // primitive stand-in (awaiting GLB)
-  monitor: { position: [0.05, 0, -0.86], rotation: [0, 0, 0], target: 0.95, kind: 'monitor' },
+  monitor: { position: [0.05, 0, -0.4], rotation: [0, 0, 0], target: 0.75, kind: 'monitor' },
   keys: { position: [-0.42, 0, 0.66], rotation: [0, 0.4, 0], target: 0.2, kind: 'keys' },
   supplies: { position: [-1.5, 0, 0.45], rotation: [0, 0.35, 0], target: 0.46, kind: 'supplies' },
   yoda: { position: [0.98, 0, 0.52], rotation: [0, -0.35, 0], target: 0.32, kind: 'yoda' },

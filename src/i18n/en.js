@@ -114,6 +114,8 @@ export default {
       coffee: 'Refill denied. The investigation continues.',
       yoda: 'Hmm. Read the timeline, you must.',
       vader: 'The dark side keeps immaculate logs.',
+      lampon: 'Let there be light.',
+      lampoff: 'Lights out — bold move, inspector.',
     },
   },
 }

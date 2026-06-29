@@ -50,6 +50,15 @@ the files.
 - Any orchestration/glue (vite config, scripts, entrypoints) wiring the touched component in.
 If mid-review the change touches more than you thought, expand the review.
 
+## Phase 2.5: Design & Experience Review (this project)
+Understand the design and check that everything the design contains is **logically
+correctly placed**, **accordingly animated**, and has its **suitable functionality**.
+So review it, understand it, and refactor if and where necessary — the goal is that the
+full experience matches the Killian Herzer reference (https://3d.killianherzer.com/):
+object-driven exploration, believable desk staging, animated/interactive props
+(folders open, lamp toggles, phone/monitor functional), witty hover/idle copy, cohesive
+cinematic mood. After any scene change, re-verify with a headless screenshot pass.
+
 ## Phase 3: Understand Before Acting
 Before writing code, answer internally:
 1. **Root cause** — not the symptom, the actual root cause?
