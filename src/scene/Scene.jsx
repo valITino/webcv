@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { useProgress } from '@react-three/drei'
+import { Selection } from '@react-three/postprocessing'
 import Lighting from './Lighting.jsx'
 import CameraRig from './CameraRig.jsx'
 import Effects from './Effects.jsx'
@@ -27,31 +28,34 @@ export default function Scene() {
       <Lighting />
       <CameraRig />
 
-      <group>
-        <Desk />
-        <Board />
-        <BoardPins />
-        {FOLDERS.map((f) => (
-          <Folder key={f.id} data={f} />
-        ))}
-        <Coffee />
-        <Lamp />
-        <Phone />
-        <Monitor />
-        <Magnifier />
-        <Keys />
-        <Supplies />
-        <Vader />
-        <Yoda />
-      </group>
+      {/* Selection wraps the interactive objects AND the composer so the Outline
+          effect can highlight whatever is hovered (KH-style emissive/outline). */}
+      <Selection>
+        <group>
+          <Desk />
+          <Board />
+          <BoardPins />
+          {FOLDERS.map((f) => (
+            <Folder key={f.id} data={f} />
+          ))}
+          <Coffee />
+          <Lamp />
+          <Phone />
+          <Monitor />
+          <Magnifier />
+          <Keys />
+          <Supplies />
+          <Vader />
+          <Yoda />
+        </group>
+        <Effects />
+      </Selection>
 
       {/* dark floor to ground the desk legs + catch the lamp shadow */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -1.52, 0]} receiveShadow>
         <planeGeometry args={[40, 40]} />
         <meshStandardMaterial color="#0a0908" roughness={1} />
       </mesh>
-
-      <Effects />
     </>
   )
 }

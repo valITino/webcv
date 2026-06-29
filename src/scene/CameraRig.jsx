@@ -1,85 +1,55 @@
-import { useEffect, useRef } from 'react'
-import { useThree } from '@react-three/fiber'
-import { OrbitControls } from '@react-three/drei'
-import gsap from 'gsap'
+import { useRef } from 'react'
+import { useFrame, useThree } from '@react-three/fiber'
+import * as THREE from 'three'
 import { useStore } from '../store/useStore.js'
 import { CAMERA, focusPose } from './layout.js'
 
-// OrbitControls for the resting desk shot; GSAP tweens for focus/inspection.
+// KH-style camera: a damped mouse-follow "free" orbit at rest that eases into a
+// fixed "inspect" pose on focus. No drag — the camera gently follows the pointer
+// (frame-rate-independent lerp), which is what gives the cinematic immersion.
+const desiredPos = new THREE.Vector3()
+const desiredTarget = new THREE.Vector3()
+
 export default function CameraRig() {
-  const controls = useRef()
   const { camera } = useThree()
   const focus = useStore((s) => s.focus)
-  const proxy = useRef({ px: 0, py: 0, pz: 0, tx: 0, ty: 0, tz: 0 })
-  const tween = useRef(null)
+  const curTarget = useRef(new THREE.Vector3(...CAMERA.overview.target))
+  const base = useRef(null)
 
-  // Initialise at the overview pose.
-  useEffect(() => {
-    const o = CAMERA.overview
-    camera.position.set(...o.pos)
-    if (controls.current) {
-      controls.current.target.set(...o.target)
-      controls.current.update()
+  // Derive the resting orbit (radius + angles) from the overview pose, once.
+  if (!base.current) {
+    const t = new THREE.Vector3(...CAMERA.overview.target)
+    const off = new THREE.Vector3(...CAMERA.overview.pos).sub(t)
+    const radius = off.length()
+    base.current = { radius, az: Math.atan2(off.x, off.z), polar: Math.acos(off.y / radius) }
+    camera.position.set(...CAMERA.overview.pos)
+  }
+
+  useFrame((state, dt) => {
+    const p = state.pointer // NDC, x/y ∈ [-1, 1]
+    if (!focus) {
+      // Free mode — orbit slightly around the desk following the mouse.
+      const b = base.current
+      const az = b.az + p.x * 0.42
+      const polar = THREE.MathUtils.clamp(b.polar - p.y * 0.16, 0.62, 1.45)
+      const hr = b.radius * Math.sin(polar)
+      desiredPos.set(
+        CAMERA.overview.target[0] + hr * Math.sin(az),
+        CAMERA.overview.target[1] + b.radius * Math.cos(polar),
+        CAMERA.overview.target[2] + hr * Math.cos(az),
+      )
+      desiredTarget.set(...CAMERA.overview.target)
+    } else {
+      // Fixed inspect pose, with a whisper of parallax so it still feels alive.
+      const pose = focusPose(focus)
+      desiredPos.set(pose.pos[0] + p.x * 0.1, pose.pos[1] - p.y * 0.05, pose.pos[2])
+      desiredTarget.set(...pose.target)
     }
-    Object.assign(proxy.current, {
-      px: o.pos[0], py: o.pos[1], pz: o.pos[2],
-      tx: o.target[0], ty: o.target[1], tz: o.target[2],
-    })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+    const k = 1 - Math.pow(0.0009, dt) // smooth, frame-rate independent
+    camera.position.lerp(desiredPos, k)
+    curTarget.current.lerp(desiredTarget, k)
+    camera.lookAt(curTarget.current)
+  })
 
-  // Animate camera on focus change.
-  useEffect(() => {
-    const c = controls.current
-    const pose = focusPose(focus)
-    if (tween.current) tween.current.kill()
-    if (c) c.enabled = false
-
-    // sync proxy from the live camera/target so the tween starts smoothly
-    proxy.current.px = camera.position.x
-    proxy.current.py = camera.position.y
-    proxy.current.pz = camera.position.z
-    if (c) {
-      proxy.current.tx = c.target.x
-      proxy.current.ty = c.target.y
-      proxy.current.tz = c.target.z
-    }
-
-    tween.current = gsap.to(proxy.current, {
-      px: pose.pos[0], py: pose.pos[1], pz: pose.pos[2],
-      tx: pose.target[0], ty: pose.target[1], tz: pose.target[2],
-      duration: 1.1,
-      ease: 'power3.inOut',
-      onUpdate: () => {
-        camera.position.set(proxy.current.px, proxy.current.py, proxy.current.pz)
-        if (c) {
-          c.target.set(proxy.current.tx, proxy.current.ty, proxy.current.tz)
-          c.update()
-        }
-      },
-      onComplete: () => {
-        if (c && !focus) c.enabled = true // only free the camera at overview
-      },
-    })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [focus])
-
-  return (
-    <OrbitControls
-      ref={controls}
-      makeDefault
-      enablePan={false}
-      enableZoom
-      minDistance={2.6}
-      maxDistance={5.2}
-      enableDamping
-      dampingFactor={0.08}
-      rotateSpeed={0.6}
-      zoomSpeed={0.5}
-      minPolarAngle={0.7}
-      maxPolarAngle={1.4}
-      minAzimuthAngle={-0.6}
-      maxAzimuthAngle={0.6}
-    />
-  )
+  return null
 }

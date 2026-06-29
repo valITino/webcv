@@ -30,7 +30,7 @@ export default {
       availability: 'EINSATZVERFÜGBARKEIT',
       availableNow: 'Verfügbar für neue Aufgaben',
       responseTime: 'Antwortzeit: < 24h',
-      hint: 'Ziehen zum Umsehen · Akte anklicken zum Untersuchen',
+      hint: 'Maus bewegen zum Umsehen · Akte anklicken zum Untersuchen',
       back: 'ZURÜCK ZUM TISCH',
       sound: 'TON',
       quality: 'QUALITÄT',

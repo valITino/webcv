@@ -30,7 +30,7 @@ export default {
       availability: 'OPERATIONAL AVAILABILITY',
       availableNow: 'Available for new opportunities',
       responseTime: 'Est. response time: < 24h',
-      hint: 'Drag to look around · Click a file to examine it',
+      hint: 'Move your mouse to look · Click a file to examine it',
       back: 'BACK TO DESK',
       sound: 'SOUND',
       quality: 'QUALITY',

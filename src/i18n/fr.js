@@ -30,7 +30,7 @@ export default {
       availability: 'DISPONIBILITÉ OPÉRATIONNELLE',
       availableNow: 'Disponible pour de nouvelles opportunités',
       responseTime: 'Réponse estimée : < 24h',
-      hint: 'Glissez pour regarder · Cliquez un dossier pour l’examiner',
+      hint: 'Bougez la souris pour regarder · Cliquez un dossier pour l’examiner',
       back: 'RETOUR AU BUREAU',
       sound: 'SON',
       quality: 'QUALITÉ',
