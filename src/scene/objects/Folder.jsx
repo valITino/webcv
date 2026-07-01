@@ -6,6 +6,7 @@ import { clone as skClone } from 'three/examples/jsm/utils/SkeletonUtils.js'
 import { useTranslation } from 'react-i18next'
 import { fit, warmify, makeLabelTexture } from '../utils.js'
 import { useStore } from '../../store/useStore.js'
+import { useContent } from '../../store/useContent.js'
 
 const URL = '/models/folder.glb'
 
@@ -41,9 +42,10 @@ export default function Folder({ data }) {
     }
   }, [active, actions, names])
 
+  const caseNo = useContent((s) => s.profile.caseNo)
   const label = useMemo(
-    () => makeLabelTexture(`EXHIBIT ${data.no}`, t(`exhibits.${data.key}.title`)),
-    [data.no, data.key, t],
+    () => makeLabelTexture(`EXHIBIT ${data.no}`, t(`exhibits.${data.key}.title`), { caseNo }),
+    [data.no, data.key, t, caseNo],
   )
 
   return (

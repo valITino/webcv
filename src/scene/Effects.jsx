@@ -27,7 +27,9 @@ export default function Effects() {
         hiddenEdgeColor={0x4a3d1e}
         blendFunction={BlendFunction.SCREEN}
       />
-      <Bloom intensity={0.7} luminanceThreshold={0.55} luminanceSmoothing={0.25} mipmapBlur radius={0.7} />
+      {/* Threshold ~0.9 keeps bloom on true emitters (lamp, screen glow) only —
+          unlit paper textures (placards, stickies) sit just below and stay matte. */}
+      <Bloom intensity={0.7} luminanceThreshold={0.9} luminanceSmoothing={0.18} mipmapBlur radius={0.7} />
       <ToneMapping mode={ToneMappingMode.ACES_FILMIC} />
       <BrightnessContrast brightness={0.0} contrast={0.07} />
       <Vignette offset={0.28} darkness={0.82} eskil={false} />

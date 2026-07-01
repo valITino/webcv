@@ -11,10 +11,17 @@ const desiredPos = new THREE.Vector3()
 const desiredTarget = new THREE.Vector3()
 
 export default function CameraRig() {
-  const { camera } = useThree()
+  const { camera, scene } = useThree()
   const focus = useStore((s) => s.focus)
   const curTarget = useRef(new THREE.Vector3(...CAMERA.overview.target))
   const base = useRef(null)
+
+  // Debug hooks (dev/?debug only, like window.__store): let the headless
+  // screenshot harness verify the live camera pose and scene state.
+  if (typeof window !== 'undefined' && window.__store) {
+    window.__cam = camera
+    window.__scene = scene
+  }
 
   // Derive the resting orbit (radius + angles) from the overview pose, once.
   if (!base.current) {

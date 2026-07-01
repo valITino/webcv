@@ -7,12 +7,14 @@ import Interactive from './Interactive.jsx'
 import { useStore } from '../../store/useStore.js'
 
 // Generic loader for a static GLB desk prop: fit + hover-scale + tooltip.
-function GlbProp({ url, cfg, env = 0.3, onClick }) {
+// `mutate` (optional, stable) runs once after warmify for per-prop tweaks.
+function GlbProp({ url, cfg, env = 0.3, onClick, mutate }) {
   const { scene } = useGLTF(url)
   const obj = useMemo(() => {
     warmify(scene, { env })
+    mutate?.(scene)
     return scene
-  }, [scene, env])
+  }, [scene, env, mutate])
   const { scale, position } = useMemo(() => fit(obj, cfg.target, 'bottom'), [obj, cfg.target])
   return (
     <Interactive kind={cfg.kind} position={cfg.position} rotation={cfg.rotation} onClick={onClick}>
@@ -43,9 +45,19 @@ export function Lamp() {
 }
 
 // ── Desk phone (GLB) → Communications Terminal (contact) ──────────────────
+// The stock body is teal; noir bakelite red makes the phone read as THE
+// contact affordance (the reference's iconic red phone). Only the body
+// material ("Material" — untextured factor colour) is retinted; buttons,
+// cord and the textured dial face keep their stock look.
+const redPhoneBody = (root) => {
+  root.traverse((o) => {
+    if (o.isMesh && o.material?.name === 'Material') o.material.color.set('#a62a1e')
+  })
+}
+
 export function Phone() {
   const openContact = useStore((s) => s.openContact)
-  return <GlbProp url="/models/phone.glb" cfg={PROPS.phone} onClick={openContact} />
+  return <GlbProp url="/models/phone.glb" cfg={PROPS.phone} onClick={openContact} mutate={redPhoneBody} />
 }
 
 // ── Vintage terminal (GLB) → opens the evidence log ───────────────────────
