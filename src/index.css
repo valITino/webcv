@@ -28,7 +28,20 @@ body {
   color: #f5efe1;
 }
 
+/* keyboard focus in the chrome accent (mouse clicks stay ringless) */
+:focus-visible {
+  outline: 1px solid rgba(255, 42, 42, 0.75);
+  outline-offset: 2px;
+}
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
 /* thin custom scrollbar inside document panels */
+.scroll-thin {
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: rgba(255, 42, 42, 0.5) transparent;
+}
 .scroll-thin::-webkit-scrollbar {
   width: 8px;
 }

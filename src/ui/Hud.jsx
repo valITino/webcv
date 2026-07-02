@@ -43,15 +43,11 @@ export default function Hud() {
       {/* top-right: controls */}
       <div className="pointer-events-auto absolute right-6 top-6 flex flex-col items-end gap-2">
         <LangSwitch dark />
-        <button
-          onClick={toggleQuality}
-          className="hud-chip transition-colors hover:text-redink"
-          title="Toggle visual quality"
-        >
+        <button onClick={toggleQuality} className="hud-chip transition-colors hover:text-redink">
           {t('hud.quality')}: {quality === 'high' ? t('quality.high') : t('quality.performance')}
         </button>
-        <button onClick={toggleMuted} className="hud-chip transition-colors hover:text-redink" title="Toggle sound">
-          {t('hud.sound')}: {muted ? 'OFF' : 'ON'}
+        <button onClick={toggleMuted} className="hud-chip transition-colors hover:text-redink">
+          {t('hud.sound')}: {muted ? t('hud.off') : t('hud.on')}
         </button>
         <div className="flex gap-3">
           <button onClick={openContact} className="hud-chip transition-colors hover:text-redink">
@@ -79,7 +75,10 @@ export default function Hud() {
       {/* bottom-center: hint / back */}
       <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-center">
         {overlay || focus ? (
-          <button onClick={close} className="pointer-events-auto btn-noir bg-ink/40 text-xs">
+          <button
+            onClick={close}
+            className="pointer-events-auto border border-redink/70 bg-ink/80 px-6 py-2.5 font-hud text-[11px] uppercase tracking-[0.2em] text-paper shadow-[0_0_12px_rgba(255,42,42,0.2)] transition-colors hover:bg-redink hover:text-paper"
+          >
             ← {t('hud.back')}
           </button>
         ) : (

@@ -1,5 +1,5 @@
 // The exhibit registry maps each clickable case file to its metadata.
-// `key` is used for i18n lookups (title/codename/hint), `id` drives the store + camera focus.
+// `key` is used for i18n lookups (title/code), `id` drives the store + camera focus.
 export const EXHIBITS = [
   { id: 'subject', no: 'A', key: 'subject' },
   { id: 'skills', no: 'B', key: 'skills' },

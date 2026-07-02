@@ -6,7 +6,7 @@ import Stars from './Stars.jsx'
 import { getExhibit } from '../data/registry.js'
 import { useContent } from '../store/useContent.js'
 import { techSkills, softSkills } from '../data/skills.js'
-import { experience, certificates, education, projects, testimonials } from '../data/exhibits.js'
+import { experience, examPrep, certificates, education, projects, testimonials } from '../data/exhibits.js'
 
 const FLAGS = { IT: '🇮🇹', RS: '🇷🇸', CH: '🇨🇭', de: '🇩🇪', en: '🇬🇧', fr: '🇫🇷' }
 
@@ -60,8 +60,8 @@ function Subject() {
           <p className="font-hud text-xs uppercase tracking-[0.2em] text-redink">{profile.title}</p>
           <dl className="mt-3 space-y-1.5">
             <Row k={t('panel.current')} v={`${profile.current.org} · ${profile.current.period}`} />
-            <Row k="DOB" v={profile.dob} />
-            <Row k="LOC" v={profile.location} />
+            <Row k={t('panel.dob')} v={profile.dob} />
+            <Row k={t('panel.loc')} v={profile.location} />
             <Row k={t('panel.nationalities')} v={profile.nationalities.map((n) => FLAGS[n]).join('  ')} />
           </dl>
         </div>
@@ -72,6 +72,7 @@ function Subject() {
         <ul className="space-y-1.5 font-ui text-sm">
           {profile.languages.map((l) => (
             <li key={l.lang} className="flex flex-wrap items-baseline gap-x-2">
+              <span aria-hidden>{FLAGS[l.code]}</span>
               <span className="font-semibold text-paper">{l.lang}</span>
               <span className="font-hud text-[11px] uppercase tracking-widest text-redink">{l.level}</span>
               <span className="italic text-paper/50">{l.exhibit}</span>
@@ -143,10 +144,10 @@ function Skills() {
           <button
             key={id}
             onClick={() => setTab(id)}
-            className={`px-4 py-1.5 font-hud text-[11px] uppercase tracking-[0.18em] transition-colors ${
+            className={`border px-4 py-1.5 font-hud text-[11px] uppercase tracking-[0.18em] transition-colors ${
               tab === id
-                ? 'bg-redink text-paper shadow-[0_0_12px_rgba(255,42,42,0.45)]'
-                : 'border border-paper/25 text-paper/60 hover:border-paper/50'
+                ? 'border-redink bg-redink text-paper shadow-[0_0_12px_rgba(255,42,42,0.45)]'
+                : 'border-paper/25 text-paper/60 hover:border-paper/50'
             }`}
           >
             {lbl}
@@ -163,6 +164,7 @@ function Skills() {
 }
 
 function Record() {
+  const { t } = useTranslation()
   return (
     <ol className="relative space-y-6 border-l border-paper/15 pl-5">
       {experience.map((e, i) => (
@@ -172,7 +174,7 @@ function Record() {
             <h3 className="font-headline text-lg text-paper">{e.role}</h3>
             {e.current && (
               <span className="border border-redink px-1.5 py-0.5 font-hud text-[9px] uppercase tracking-widest text-redink">
-                ACTIVE
+                {t('panel.active')}
               </span>
             )}
           </div>
@@ -235,6 +237,18 @@ function Credentials() {
                 {e.school} · {e.period}
               </p>
               {e.detail && <p className="mt-0.5 text-[12px] leading-snug text-paper/65">{e.detail}</p>}
+            </li>
+          ))}
+        </ul>
+        {/* short study interludes recovered from the file */}
+        <p className="mb-1.5 mt-5 font-hud text-[10px] uppercase tracking-[0.18em] text-paper/40">
+          {t('panel.interludes')}
+        </p>
+        <ul className="space-y-1">
+          {examPrep.map((x, i) => (
+            <li key={i} className="flex flex-wrap justify-between gap-x-3 border-l border-paper/10 pl-3 text-[12px] text-paper/55">
+              <span>{x.label}</span>
+              <span className="font-hud text-[11px] tracking-wide text-paper/40">{x.period}</span>
             </li>
           ))}
         </ul>

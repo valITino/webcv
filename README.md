@@ -50,21 +50,38 @@ geometry compression, node hierarchy & animations preserved — into `public/mod
 npm run optimize:models
 ```
 
-Currently shipped GLBs: `desk`, `board` (evidence board), `folder` (animated), `coffee`.
-The lamp, phone, monitor, magnifier and keys are **temporary Three.js primitives**.
+Shipped GLBs (12): `desk`, `board` (evidence board, baked detective collage), `folder` (animated),
+`coffee`, `lamp` (clickable — toggles the key light), `phone` (retinted evidence red — opens the
+contact terminal), `monitor` (screen redrawn at runtime with the case trace log — opens the
+evidence log), `magnifier`, `keys`, `supplies`, `vader`, `yoda` (idle animation).
 
-### Adding the remaining models (when you send them)
+### Adding a new model
 
-1. Drop the raw `.glb` into `raw-assets/` using these names:
-   `lamp.glb`, `phone.glb`, `monitor.glb`, `magnifier.glb`, `keys.glb`
-2. Add a line for each to `scripts/optimize-models.mjs` (`{ in, out, tex }`) and run
-   `npm run optimize:models`.
-3. In `src/scene/objects/Props.jsx`, replace the primitive body of the matching component with a
-   loaded model (see `Coffee.jsx` for the `useGLTF` + `fit()` pattern). Placement/scale lives in
-   `src/scene/layout.js` (`PROPS`).
+1. Drop the raw `.glb` into `raw-assets/`.
+2. Add a line to `scripts/optimize-models.mjs` (`{ in, out, tex }`) and run `npm run optimize:models`.
+3. Register placement/scale in `src/scene/layout.js` (`PROPS`) and render it via the `GlbProp`
+   pattern in `src/scene/objects/Props.jsx`.
 
 The `fit()` helper (`src/scene/utils.js`) re-centres and scales any model to a target size, so new
-assets slot in regardless of their original export transform.
+assets slot in regardless of their original export transform. It measures each model's pristine
+bounding box exactly once (cached on the object), which keeps the transform stable across React
+remounts.
+
+## Canvas-drawn print & screen textures
+
+The personalised paper/screen artifacts are drawn at runtime onto canvases (no image assets):
+folder placards (aged stock, CONFIDENTIAL stamp, case ref), the typed A4 case report revealed
+inside an opened folder, the board's sticky note, and the terminal's phosphor readout (drawn into
+the measured UV rect of the monitor's texture atlas, with a gentle emissive flicker). They all
+follow the hybrid type system: typewriter faces only on in-world paper, Rethink Sans + neon red
+for all screen chrome.
+
+## Content admin (no backend)
+
+Press `Ctrl/Cmd+Shift+E` or append `?admin` to open the in-browser content admin. Edits overlay
+the defaults from `src/data/profile.js`, persist to `localStorage`, and can be exported/imported
+as JSON. The scene reads through the overlay live — placards, board note and terminal readout
+update as you type.
 
 ## Customising the content
 
@@ -80,11 +97,21 @@ All résumé content is plain data — no hunting through components:
 
 ```
 src/
-  components/  DesktopGate · Intro (newspaper) · Experience (canvas + overlays)
-  scene/       Scene · CameraRig · Lighting · Effects · layout · utils
-    objects/   Desk · Board · BoardPins · Folder · Coffee · Props (primitives)
-  ui/          Hud · ExhibitPanel · ContactTerminal · Credits · Tooltip · IdleToast · Cursor · Stars · LangSwitch · Overlay
+  components/  DesktopGate · Intro (newspaper) · Experience (canvas + overlays) · CanvasBoundary
+  scene/       Scene · CameraRig · Lighting · Effects · layout · utils (fit + canvas textures)
+    objects/   Desk · Board · BoardPins · Folder · Coffee · Props (GLB props) · Interactive
+  ui/          Hud · ExhibitPanel · ContactTerminal · Credits · Overlay · Tooltip · IdleToast ·
+               Cursor · Stars · LangSwitch · Flash · Admin
+  hooks/       useIsDesktop · useIdle · useKonami
   data/        profile · skills · exhibits · credits · registry
-  i18n/        en · de · fr + detector
-  store/       Zustand store
+  i18n/        en · de · fr + auto-detection
+  store/       useStore (experience state) · useContent (CMS overlay)
 ```
+
+## Quality & verification
+
+- Two render modes (HUD toggle): **Cinematic** (Bloom, ACES, grain, vignette, hover outlines,
+  2048px shadows) and **Performance** (composer off, 1024px shadows, lower DPR).
+- A WebGL failure is caught by an error boundary with a themed fallback instead of a blank page.
+- Dev/`?debug` builds expose `window.__store`, `window.__cam` and `window.__scene` so headless
+  screenshot harnesses can drive and assert the experience.

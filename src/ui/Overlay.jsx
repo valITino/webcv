@@ -38,7 +38,7 @@ export default function Overlay({ open, align = 'left', maxW = 'max-w-xl', child
 
           <button
             onClick={close}
-            className="absolute right-5 top-4 z-10 font-hud text-[11px] uppercase tracking-[0.18em] text-paper/55 transition-colors hover:text-redink"
+            className="absolute right-5 top-4 z-10 border border-paper/15 bg-ink/90 px-2.5 py-1 font-hud text-[11px] uppercase tracking-[0.18em] text-paper/60 transition-colors hover:border-redink/60 hover:text-redink"
           >
             {t('panel.close')} ✕
           </button>
@@ -51,7 +51,12 @@ export default function Overlay({ open, align = 'left', maxW = 'max-w-xl', child
               DOC_REF: <span className="text-paper/55">{docRef}</span>{' '}
               <span className="text-redink/70">// {t('panel.secure')}</span>
             </span>
-            <span className="barcode hidden sm:block" aria-hidden />
+            <span className="flex items-center gap-4">
+              <span className="hidden font-hud text-[9px] uppercase tracking-[0.18em] text-paper/30 md:inline">
+                {t('panel.closeHint')}
+              </span>
+              <span className="barcode hidden sm:block" aria-hidden />
+            </span>
           </div>
         </div>
       </div>

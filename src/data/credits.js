@@ -13,6 +13,9 @@ export const credits = {
     { ref: 'EX-SUPP-07', name: 'Office Supplies Pack', note: 'Standard-issue stationery.' },
     { ref: 'EX-FIG-08', name: 'LEGO Darth Vader', note: 'Personal effect. Recovered from the desk.' },
     { ref: 'EX-FIG-09', name: 'LEGO Yoda (animated)', note: 'Personal effect. Still moving.' },
+    { ref: 'EX-LAMP-10', name: 'Banker’s Desk Lamp', note: 'The only honest light in the room. Clickable.' },
+    { ref: 'EX-PHONE-11', name: 'Desk Telephone', note: 'Direct line — retinted evidence red.' },
+    { ref: 'EX-TERM-12', name: 'Vintage Terminal', note: 'Live trace readout. Knows the case number.' },
   ],
   thanks:
     'Concept & art direction inspired by cinematic, object-driven 3D portfolios. Built with React Three Fiber, drei, postprocessing and GSAP.',

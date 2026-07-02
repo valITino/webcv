@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useContent } from '../store/useContent.js'
 
 // In-browser content admin (static-site CMS). Toggle with ?admin or Ctrl+Shift+E.
@@ -6,17 +6,13 @@ import { useContent } from '../store/useContent.js'
 const FIELDS = [
   { section: 'Identity' },
   { path: 'name', label: 'Name' },
-  { path: 'alias', label: 'Alias' },
   { path: 'title', label: 'Title' },
   { path: 'dob', label: 'Date of birth' },
   { path: 'caseNo', label: 'Case №' },
-  { path: 'fileRef', label: 'File ref' },
   { path: 'coords', label: 'Coordinates (HUD)' },
   { section: 'Current role' },
-  { path: 'current.role', label: 'Role' },
   { path: 'current.org', label: 'Organisation' },
   { path: 'current.period', label: 'Period' },
-  { path: 'current.summary', label: 'Summary', area: true },
   { section: 'Location' },
   { path: 'location', label: 'Location (short)' },
   { path: 'address', label: 'Address (full)' },
@@ -42,6 +38,7 @@ export default function Admin() {
   const exportJSON = useContent((s) => s.exportJSON)
   const importJSON = useContent((s) => s.importJSON)
   const fileRef = useRef(null)
+  const [importState, setImportState] = useState(null) // null | 'ok' | 'fail'
 
   // Ctrl/Cmd+Shift+E toggles the admin
   useEffect(() => {
@@ -70,8 +67,13 @@ export default function Admin() {
     const f = e.target.files?.[0]
     if (!f) return
     const r = new FileReader()
-    r.onload = () => importJSON(String(r.result))
+    r.onload = () => {
+      const ok = importJSON(String(r.result))
+      setImportState(ok ? 'ok' : 'fail')
+      setTimeout(() => setImportState(null), 3000)
+    }
     r.readAsText(f)
+    e.target.value = '' // allow re-importing the same file
   }
 
   return (
@@ -118,6 +120,15 @@ export default function Admin() {
       </div>
 
       <div className="grid grid-cols-2 gap-2 border-t border-paper/15 p-3">
+        {importState && (
+          <p
+            className={`col-span-2 text-center font-hud text-[10px] uppercase tracking-[0.2em] ${
+              importState === 'ok' ? 'text-[#42f59b]' : 'text-redink'
+            }`}
+          >
+            {importState === 'ok' ? 'IMPORTED ✓' : 'IMPORT FAILED — INVALID JSON'}
+          </p>
+        )}
         <button onClick={doExport} className="btn-noir text-[11px]">EXPORT JSON</button>
         <button onClick={() => fileRef.current?.click()} className="btn-noir text-[11px]">IMPORT JSON</button>
         <button

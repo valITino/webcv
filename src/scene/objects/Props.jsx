@@ -78,12 +78,17 @@ export function Monitor() {
       if (o.isMesh && o.material?.name === 'Material.002') screenMat.current = o.material
     })
     const m = screenMat.current
-    if (m && !m.userData.__readout) {
-      const tex = makeScreenTexture(m.map, { caseNo })
+    // Redraw whenever the case number changes (CMS edits included). The
+    // pristine atlas is kept aside as the redraw source; only the previously
+    // generated canvas texture is disposed — never the original.
+    if (m && m.userData.__readoutCase !== caseNo) {
+      m.userData.__baseMap = m.userData.__baseMap || m.map
+      const tex = makeScreenTexture(m.userData.__baseMap, { caseNo })
       if (tex) {
+        if (m.userData.__readoutCase !== undefined) m.map.dispose()
         m.map = tex
         m.emissiveMap = tex
-        m.userData.__readout = true
+        m.userData.__readoutCase = caseNo
         m.needsUpdate = true
       }
     }

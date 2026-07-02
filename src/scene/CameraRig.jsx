@@ -15,6 +15,7 @@ export default function CameraRig() {
   const focus = useStore((s) => s.focus)
   const curTarget = useRef(new THREE.Vector3(...CAMERA.overview.target))
   const base = useRef(null)
+  const poseCache = useRef({ focus: undefined, pose: null })
 
   // Debug hooks (dev/?debug only, like window.__store): let the headless
   // screenshot harness verify the live camera pose and scene state.
@@ -50,7 +51,9 @@ export default function CameraRig() {
       desiredTarget.set(...CAMERA.overview.target)
     } else {
       // Fixed inspect pose, with a whisper of parallax so it still feels alive.
-      const pose = focusPose(focus)
+      // Resolved once per focus change — not per frame.
+      if (poseCache.current.focus !== focus) poseCache.current = { focus, pose: focusPose(focus) }
+      const pose = poseCache.current.pose
       desiredPos.set(pose.pos[0] + p.x * 0.1, pose.pos[1] - p.y * 0.05, pose.pos[2])
       desiredTarget.set(...pose.target)
     }

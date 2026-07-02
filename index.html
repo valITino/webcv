@@ -13,12 +13,29 @@
     <meta property="og:title" content="V.T. // Confidential Case File" />
     <meta property="og:description" content="Cybercrime Investigator. Examine the exhibits — an interactive 3D résumé." />
     <meta property="og:type" content="website" />
+    <!-- replace with an absolute URL once the deploy domain is known -->
+    <meta property="og:image" content="/images/portrait.png" />
+    <meta name="twitter:card" content="summary" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- non-blocking font load (display=swap covers the FOUT window) -->
     <link
-      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Special+Elite&family=Oswald:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700&family=Rethink+Sans:wght@400;500;600;700;800&display=swap"
-      rel="stylesheet"
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Special+Elite&family=Oswald:wght@400;700&family=Inter:wght@400;500;600;700&family=Rethink+Sans:wght@400;500;600;700&display=swap"
     />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Special+Elite&family=Oswald:wght@400;700&family=Inter:wght@400;500;600;700&family=Rethink+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+      media="print"
+      onload="this.media='all'"
+    />
+    <noscript>
+      <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Special+Elite&family=Oswald:wght@400;700&family=Inter:wght@400;500;600;700&family=Rethink+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet"
+      />
+    </noscript>
   </head>
   <body>
     <div id="root"></div>

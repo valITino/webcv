@@ -10,7 +10,7 @@ export default function DesktopGate() {
         <div className="mx-auto mb-8 flex h-16 w-16 items-center justify-center rounded-full border-2 border-redink/70">
           <span className="font-stencil text-2xl text-redink">!</span>
         </div>
-        <p className="hud-chip mb-3 text-redink/80">CLASSIFIED</p>
+        <p className="hud-chip mb-3 text-redink/80">{t('gate.chip')}</p>
         <h1 className="font-stencil text-2xl leading-tight tracking-[0.12em] text-paper">
           {t('gate.title')}
         </h1>

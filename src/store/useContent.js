@@ -33,7 +33,9 @@ function setPath(obj, path, value) {
 function loadOverrides() {
   if (typeof localStorage === 'undefined') return {}
   try {
-    return JSON.parse(localStorage.getItem(KEY) || '{}')
+    // stored "null"/scalars parse fine but aren't usable overrides
+    const parsed = JSON.parse(localStorage.getItem(KEY) || '{}')
+    return parsed && typeof parsed === 'object' && !Array.isArray(parsed) ? parsed : {}
   } catch {
     return {}
   }
@@ -75,6 +77,8 @@ export const useContent = create((set, get) => ({
   importJSON: (str) => {
     try {
       const data = JSON.parse(str)
+      // a scalar or array would silently corrupt every profile consumer
+      if (!data || typeof data !== 'object' || Array.isArray(data)) return false
       const overrides = { profile: data }
       set({ overrides, profile: deepMerge(defaults, data) })
       localStorage.setItem(KEY, JSON.stringify(overrides))

@@ -66,7 +66,7 @@ export const experience = [
   },
 ]
 
-// Short study interludes referenced in the file.
+// Short study interludes referenced in the file (shown under Credentials → Education).
 export const examPrep = [
   { label: 'Exam Preparation — Fern-Fachhochschule Schweiz', period: 'Jul 2025 — Aug 2025' },
   { label: 'Exam Preparation — Fern-Fachhochschule Schweiz', period: 'Dec 2024 — Jan 2025' },

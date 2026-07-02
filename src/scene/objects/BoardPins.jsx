@@ -1,8 +1,8 @@
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import * as THREE from 'three'
 import { useTexture, Line } from '@react-three/drei'
 import Interactive from './Interactive.jsx'
-import { profile } from '../../data/profile.js'
+import { useContent } from '../../store/useContent.js'
 
 // A few *personalised* items pinned over the board's already-rich baked
 // detective collage (map, crime-scene photos, fingerprint card, clippings):
@@ -41,7 +41,9 @@ function Pin({ position, color = '#c0392b' }) {
 
 export default function BoardPins() {
   const portrait = useTexture('/images/portrait.png')
-  const note = useMemo(() => makeNote(['CASE №', profile.caseNo, '', 'STATUS:', 'AT LARGE']), [])
+  const caseNo = useContent((s) => s.profile.caseNo) // CMS-aware, like placards & terminal
+  const note = useMemo(() => makeNote(['CASE №', caseNo, '', 'STATUS:', 'AT LARGE']), [caseNo])
+  useEffect(() => () => note.dispose(), [note])
 
   const card = [0.5, -0.1, 0.02]
 

@@ -57,8 +57,8 @@ export default function Intro() {
         {/* Masthead */}
         <div className="intro-stagger flex items-center justify-between font-type text-[10px] uppercase tracking-[0.2em] text-ink/70">
           <span>{t('intro.dateline')}</span>
-          <span>{new Date('2026-06-29').toDateString()}</span>
-          <span>PRICE: ONE FAVOUR</span>
+          <span>{t('intro.date')}</span>
+          <span>{t('intro.price')}</span>
         </div>
         <h1 className="intro-stagger mt-2 text-center font-headline text-4xl font-black tracking-tight text-ink md:text-6xl">
           {t('intro.masthead')}
@@ -86,7 +86,7 @@ export default function Intro() {
               <div className="relative overflow-hidden bg-paperdark">
                 <img
                   src="/images/portrait.png"
-                  alt="Subject V.T."
+                  alt={profile.name}
                   className="block w-full object-cover"
                   style={{ filter: 'grayscale(1) contrast(1.25) brightness(0.92) sepia(0.18)' }}
                 />
@@ -106,7 +106,7 @@ export default function Intro() {
               <div
                 className="stamp absolute -right-4 -top-5 rotate-[-12deg] animate-stampin px-3 py-1 font-stencil text-lg font-bold tracking-[0.2em]"
               >
-                WANTED
+                {t('intro.stamp')}
               </div>
             </div>
             <p className="mt-2 text-center font-type text-[10px] uppercase tracking-widest text-ink/60">

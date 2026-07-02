@@ -7,6 +7,7 @@ export default function LangSwitch({ dark = false }) {
   const current = (i18n.resolvedLanguage || i18n.language || 'en').slice(0, 2)
   const base = dark ? 'text-paper/55' : 'text-ink/50'
   const active = dark ? 'text-redink' : 'text-evidence'
+  const inactiveHover = dark ? 'hover:text-paper' : 'hover:text-ink'
 
   return (
     <div className={`flex items-center gap-2 font-hud text-[11px] uppercase tracking-[0.18em] ${base}`}>
@@ -15,7 +16,7 @@ export default function LangSwitch({ dark = false }) {
           {i > 0 && <span className="opacity-40">/</span>}
           <button
             onClick={() => i18n.changeLanguage(lng)}
-            className={`transition-colors hover:opacity-100 ${current === lng ? `${active} font-bold` : 'hover:text-current'}`}
+            className={`transition-colors ${current === lng ? `${active} font-bold` : inactiveHover}`}
             aria-label={`Switch language to ${lng}`}
           >
             {lng}

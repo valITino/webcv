@@ -1,3 +1,4 @@
+import { useLayoutEffect, useRef } from 'react'
 import { Environment, Lightformer } from '@react-three/drei'
 import { useStore } from '../store/useStore.js'
 
@@ -7,20 +8,35 @@ import { useStore } from '../store/useStore.js'
 export default function Lighting() {
   const ravenclaw = useStore((s) => s.ravenclaw)
   const lampOn = useStore((s) => s.lampOn)
+  const quality = useStore((s) => s.quality)
   const inspecting = useStore((s) => s.activeExhibit) // a folder is on the stage
   const key = ravenclaw ? '#5b8bd0' : '#ffebb3' // lamp key light
   const warm = ravenclaw ? '#cd7f32' : '#e7b87a' // warm bounce / rim → bronze in RC mode
   const keyIntensity = lampOn ? (ravenclaw ? 20 : 16) : 0 // clicking the lamp burns it out
   const glow = lampOn ? 1.3 : 0
+  const shadowRes = quality === 'high' ? 2048 : 1024
+
+  // A spotlight's target is a detached Object3D — unless it's added to the
+  // scene graph (or its matrix is updated manually) the light silently aims
+  // at the origin and `target-position` does nothing.
+  const spotRef = useRef(null)
+  useLayoutEffect(() => {
+    const l = spotRef.current
+    if (!l) return
+    l.target.position.set(0.1, 0, 0.22)
+    l.target.updateMatrixWorld()
+  }, [quality])
 
   return (
     <>
       <ambientLight intensity={0.1} color="#2a2620" />
 
-      {/* Key light — emanating from the desk lamp (back-left) */}
+      {/* Key light — emanating from the desk lamp (back-left). Keyed on
+          quality so the shadow map is rebuilt at the right resolution. */}
       <spotLight
+        key={quality}
+        ref={spotRef}
         position={[-1.05, 1.0, -0.05]}
-        target-position={[0.1, 0, 0.22]}
         color={key}
         intensity={keyIntensity}
         angle={0.74}
@@ -28,7 +44,7 @@ export default function Lighting() {
         distance={9}
         decay={1.7}
         castShadow
-        shadow-mapSize={[2048, 2048]}
+        shadow-mapSize={[shadowRes, shadowRes]}
         shadow-bias={-0.0006}
         shadow-normalBias={0.02}
       />

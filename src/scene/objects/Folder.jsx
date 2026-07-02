@@ -47,11 +47,15 @@ export default function Folder({ data }) {
     () => makeLabelTexture(`EXHIBIT ${data.no}`, t(`exhibits.${data.key}.title`), { caseNo }),
     [data.no, data.key, t, caseNo],
   )
-  // typed case report — laid on top of the A4 stack once the folder is open
+  // typed case report — created lazily when the folder opens (only one folder
+  // can be open, so the other five never pay for a texture)
   const report = useMemo(
-    () => makeReportTexture(`EXHIBIT ${data.no}`, t(`exhibits.${data.key}.title`), { caseNo }),
-    [data.no, data.key, t, caseNo],
+    () => (active ? makeReportTexture(`EXHIBIT ${data.no}`, t(`exhibits.${data.key}.title`), { caseNo }) : null),
+    [active, data.no, data.key, t, caseNo],
   )
+  // dispose replaced CanvasTextures (language switch, CMS edits, close/unmount)
+  useEffect(() => () => label.dispose(), [label])
+  useEffect(() => () => report && report.dispose(), [report])
 
   return (
     <group
@@ -83,7 +87,7 @@ export default function Folder({ data }) {
             </mesh>
           )}
           {/* typed case report on the opened stack */}
-          {active && (
+          {active && report && (
             <mesh position={[0.03, 0.06, 0.04]} rotation={[-Math.PI / 2, 0, 0.05]}>
               <planeGeometry args={[0.3, 0.42]} />
               <meshBasicMaterial map={report} toneMapped={false} />
