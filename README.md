@@ -250,9 +250,9 @@ terminal readout update as you type. "Reset to defaults" clears the overlay.
 ## Design system
 
 The full visual language — palette, five-font type system, surface recipes, motion vocabulary,
-copy voice — is documented as a ready-to-use Claude prompt in
-[`DESIGN_PROMPT.md`](DESIGN_PROMPT.md). Paste it into Claude to generate new artifacts (pages,
-posters, slides, components) that match this project's look.
+copy voice — plus the whole experience flow is documented as a ready-to-paste prompt in
+[`DESIGN_PROMPT.md`](DESIGN_PROMPT.md). Give it to **Claude Design** together with this project
+to rebuild the experience as an interactive prototype that feels like running it on localhost.
 
 ## Project structure
 

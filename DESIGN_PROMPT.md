@@ -1,27 +1,85 @@
-# DESIGN_PROMPT.md — the "V.T. // Case File" design system, as a Claude prompt
+# DESIGN_PROMPT.md — rebuild "V.T. // Case File" as an interactive prototype, with Claude Design
 
-This file turns the design system of this repository into a **ready-to-paste prompt**.
-Use it to have Claude design *new* things — a landing page, a poster, slides, a component,
-an email signature, a PDF one-pager — that look and sound like they belong to this project.
+This file is a **ready-to-paste prompt** that has **Claude Design** take this project *as it is*
+and reproduce it as an **interactive prototype** — the same experience you get running the site on
+`localhost`: the newspaper intro, the lamp-lit 3D desk you orbit, the case-file folders that open
+into exhibits, the contact terminal, the evidence board. The design-system sections below (1–10)
+are the exact look/feel spec the prototype must hit.
 
 **How to use**
 
-1. Copy everything below the horizontal rule into Claude (claude.ai, Claude Code, or the API).
-2. Replace the `DESIGN BRIEF` placeholder at the top with what you want designed.
-3. Every value in the prompt is transcribed from this repo's code (`tailwind.config.js`,
+1. Open Claude Design **with this project available** — attach the repo or point Claude Design at
+   the source. The code is the source of truth for content, flow and assets; this prompt is the
+   map and the fidelity bar.
+2. Paste everything below the horizontal rule as the instruction. Claude Design rebuilds the
+   experience (§0 says what to reproduce; §1–§10 say exactly how it must look, move and read).
+3. Every value in this prompt is transcribed from this repo's code (`tailwind.config.js`,
    `src/index.css`, `src/scene/Lighting.jsx`, `src/scene/Effects.jsx`, `src/i18n/en.js`,
-   `src/scene/utils.js`) — if you change the design system in code, update it here too.
+   `src/scene/utils.js`, `src/data/*`) — if you change the app, update this file to match.
 
 ---
 
-You are designing inside an existing, strict design system called **“V.T. // Case File”** —
-a film-noir detective case-file world crossed with a cyber-police HUD. Follow it exactly:
-reuse its tokens, recipes and voice; do not invent new colors, fonts, or rounded corners.
+You are rebuilding an existing project — **“V.T. // Case File”**, a film-noir detective
+case-file résumé crossed with a cyber-police HUD — as an **interactive prototype in Claude
+Design**. The project is provided as-is; reproduce the *whole experience* so it feels like
+running it on `localhost`, not a static mockup. Treat §1–§10 as the exact look/feel spec:
+reuse its tokens, recipes and voice; invent no new colors, fonts, or rounded corners.
 
-## DESIGN BRIEF
+## OBJECTIVE — mirror this project
 
-> **[Replace this line with what you want designed — e.g. “a one-page printable PDF résumé”,
-> “a 404 page”, “a LinkedIn banner”, “an email signature”, “a project card component”.]**
+> **Take the whole project as-is and reproduce it as an interactive prototype that matches the
+> localhost experience end to end.** Attempt the **real 3D**: build the lamp-lit desk as an
+> actual Three.js / React Three Fiber scene the visitor can orbit, with clickable props — do not
+> substitute a flat 2D mockup. Use the repo's `src/data/*` as the real CV content and
+> `public/models/*.glb` as the desk props where those assets are available; where a specific
+> asset isn't provided, stand it in with simple 3D primitives that read as the same object
+> (a boxy folder, a cylinder lamp) — still in 3D. Fidelity priority: the *feeling and flow* of
+> §0 first, then the exact tokens/recipes of §1–§10. State any assumption you must make.
+
+## 0. The experience to reproduce (the whole flow)
+
+Rebuild this exact sequence and its interactions — this *is* the localhost experience:
+
+- **Desktop-only gate.** On a coarse pointer or a viewport narrower than 1024 px, show the
+  in-world notice instead of the scene: chip `CLASSIFIED`, title
+  *“ACCESS RESTRICTED // DESKTOP ONLY”*, and the "runs on a full workstation" body. The
+  experience itself assumes mouse + a wide screen.
+- **Newspaper intro = loader.** A front page of *“THE DAILY INVESTIGATOR”*
+  (`VOL. MMXXVI — NO. 8305 — CONFIDENTIAL`, kicker `CYBER-CRIME DESK · SPECIAL EDITION`) with the
+  headline *“WANTED BY CYBER-POLICE”*, a mugshot captioned *“EXHIBIT A — the subject, smiling.
+  Considered armed with sarcasm.”*, a `WANTED` stamp that slams in, and a *“Decrypting evidence”*
+  progress bar. The **OPEN THE CASE FILE** button unlocks when loading completes; clicking it
+  fades the paper away and reveals the desk.
+- **The lamp-lit 3D desk.** A free-orbit scene the visitor explores by moving the mouse (subtle
+  parallax, damped camera). Clicking any object glides the camera in to inspect it and glides back
+  on `Esc` / **BACK TO DESK**. One warm desk lamp is the key light; everything else sits in deep
+  shadow (see §8).
+- **Six case-file folders = Exhibits A–F.** Fanned across the desk; hovering lifts a folder,
+  clicking opens it and brings up its dossier panel. The six, in order, with their two-layer
+  naming (serif title / dry file code): **THE SUBJECT** (`EXHIBIT A — IDENTITY`), **MODUS
+  OPERANDI** (`EXHIBIT B — CAPABILITIES`), **TRACK RECORD** (`EXHIBIT C — MOVEMENTS`),
+  **CREDENTIALS** (`EXHIBIT D — PAPER TRAIL`), **CASE FILES** (`EXHIBIT E — PRIOR WORK`),
+  **TESTIMONIALS** (`EXHIBIT F — WITNESSES`). Panels render the real content from `src/data/*`.
+- **Clickable props, each with a witty hover tooltip** (exact strings): **lamp** *“The only honest
+  light in the room.”* toggles the key light on/off; **phone** *“Direct line. Care to leave a
+  message?”* opens the **Communications Terminal** (contact — email/phone/location + voicemail
+  line); **monitor** *“Live system readout.”* opens the **Evidence Log** (asset credits) and shows
+  a live green CRT trace readout; plus flavor props — **coffee** *“Cold coffee. Older than this
+  investigation.”*, **magnifier**, **keys** *“Keys to somewhere. Not your concern.”*, **supplies**,
+  and two LEGO guardians (**Vader**, **Yoda**) flanking the terminal.
+- **Evidence board** behind the desk: a detective collage joined by **red string**, with a
+  pinned sticky note (`CASE №`, status `AT LARGE`). Tooltip: *“The evidence board. Follow the
+  strings.”*
+- **HUD & ambient life.** Top-right chrome controls: **QUALITY** (Cinematic ↔ Performance),
+  **SOUND** (starts muted), **CONTACT**, **EVIDENCE LOG**, and an **EN / DE / FR** language switch.
+  Bottom-center: the pulsing hint *“Move your mouse to look · Click a file to examine it”*, which
+  becomes **← BACK TO DESK** while inspecting. Status line *“SYSTEM STATUS // ONLINE”* with a
+  pulsing green dot. After ~20 s idle, cycling italic quips appear (e.g. *“Still there, inspector?
+  The coffee's gone cold.”*). `Esc` closes any open panel. (Sound/quality reset on reload;
+  language persists.)
+- **Stack it targets.** The original is React + **Three.js / React Three Fiber** with **drei**,
+  **GSAP** for the intro, and postprocessing (**Bloom / Vignette / film grain**, ACES tone
+  mapping). Build the prototype the same way so the 3D and mood match §8.
 
 ## 1. Identity & mood
 
@@ -171,7 +229,7 @@ One exception: CRT screens use `700 15px "Courier New", monospace` (phosphor rea
 - Headlines go full tabloid-noir: *“WANTED BY CYBER-POLICE”*, masthead *“THE DAILY
   INVESTIGATOR”*, price gag *“PRICE: ONE FAVOUR”*.
 
-## 8. Light & post-processing mood (for 3D scenes or imagery)
+## 8. Light & post-processing mood (the prototype's 3D scene)
 
 Single warm key spotlight `#ffebb3` (the desk lamp) with soft penumbra against ambient
 `#2a2620` at 0.1 intensity; cool directional fill `#6076a0`; warm bounce `#e7b87a`; background
@@ -210,5 +268,7 @@ Google Fonts request:
 
     https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Special+Elite&family=Oswald:wght@400;700&family=Inter:wght@400;500;600;700&family=Rethink+Sans:wght@400;500;600;700&display=swap
 
-Now produce the design described in the **DESIGN BRIEF**, applying this system faithfully.
-State any assumption you have to make, and keep every color, face, and copy convention above.
+Now rebuild the **interactive prototype** of this project (see the **OBJECTIVE** and §0),
+applying this system faithfully. Attempt the real 3D desk; reproduce the whole flow so it feels
+like localhost. State any assumption you have to make, and keep every color, face, and copy
+convention above.
