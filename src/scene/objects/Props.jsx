@@ -1,10 +1,12 @@
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import * as THREE from 'three'
+import { useFrame } from '@react-three/fiber'
 import { useGLTF, useAnimations } from '@react-three/drei'
 import { PROPS } from '../layout.js'
-import { fit, warmify } from '../utils.js'
+import { fit, warmify, makeScreenTexture } from '../utils.js'
 import Interactive from './Interactive.jsx'
 import { useStore } from '../../store/useStore.js'
+import { useContent } from '../../store/useContent.js'
 
 // Generic loader for a static GLB desk prop: fit + hover-scale + tooltip.
 // `mutate` (optional, stable) runs once after warmify for per-prop tweaks.
@@ -61,9 +63,51 @@ export function Phone() {
 }
 
 // ── Vintage terminal (GLB) → opens the evidence log ───────────────────────
+// The screen ("Material.002", the only emissive material) gets its baked
+// generic readout redrawn with this case's trace log, and a gentle CRT
+// flicker on the emissive keeps the phosphor alive.
 export function Monitor() {
   const openCredits = useStore((s) => s.openCredits)
-  return <GlbProp url="/models/monitor.glb" cfg={PROPS.monitor} env={0.3} onClick={openCredits} />
+  const caseNo = useContent((s) => s.profile.caseNo)
+  const { scene } = useGLTF('/models/monitor.glb')
+  const screenMat = useRef(null)
+
+  const obj = useMemo(() => {
+    warmify(scene, { env: 0.3 })
+    scene.traverse((o) => {
+      if (o.isMesh && o.material?.name === 'Material.002') screenMat.current = o.material
+    })
+    const m = screenMat.current
+    if (m && !m.userData.__readout) {
+      const tex = makeScreenTexture(m.map, { caseNo })
+      if (tex) {
+        m.map = tex
+        m.emissiveMap = tex
+        m.userData.__readout = true
+        m.needsUpdate = true
+      }
+    }
+    return scene
+  }, [scene, caseNo])
+  const { scale, position } = useMemo(() => fit(obj, PROPS.monitor.target, 'bottom'), [obj])
+
+  useFrame(({ clock }) => {
+    const m = screenMat.current
+    if (m) {
+      const t = clock.elapsedTime
+      m.emissiveIntensity = 1 + 0.05 * Math.sin(t * 12.3) + 0.035 * Math.sin(t * 3.1)
+    }
+  })
+
+  return (
+    <Interactive kind="monitor" position={PROPS.monitor.position} rotation={PROPS.monitor.rotation} onClick={openCredits}>
+      {(hovered) => (
+        <group scale={hovered ? 1.06 : 1}>
+          <primitive object={obj} scale={scale} position={position} />
+        </group>
+      )}
+    </Interactive>
+  )
 }
 
 // ── Magnifying glass (GLB) ────────────────────────────────────────────────

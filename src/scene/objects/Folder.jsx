@@ -4,7 +4,7 @@ import { useGLTF, useAnimations } from '@react-three/drei'
 import { Select } from '@react-three/postprocessing'
 import { clone as skClone } from 'three/examples/jsm/utils/SkeletonUtils.js'
 import { useTranslation } from 'react-i18next'
-import { fit, warmify, makeLabelTexture } from '../utils.js'
+import { fit, warmify, makeLabelTexture, makeReportTexture } from '../utils.js'
 import { useStore } from '../../store/useStore.js'
 import { useContent } from '../../store/useContent.js'
 
@@ -47,6 +47,11 @@ export default function Folder({ data }) {
     () => makeLabelTexture(`EXHIBIT ${data.no}`, t(`exhibits.${data.key}.title`), { caseNo }),
     [data.no, data.key, t, caseNo],
   )
+  // typed case report — laid on top of the A4 stack once the folder is open
+  const report = useMemo(
+    () => makeReportTexture(`EXHIBIT ${data.no}`, t(`exhibits.${data.key}.title`), { caseNo }),
+    [data.no, data.key, t, caseNo],
+  )
 
   return (
     <group
@@ -75,6 +80,13 @@ export default function Folder({ data }) {
             <mesh position={[0, 0.055, 0.06]} rotation={[-Math.PI / 2, 0, 0]}>
               <planeGeometry args={[0.34, 0.17]} />
               <meshBasicMaterial map={label} transparent toneMapped={false} />
+            </mesh>
+          )}
+          {/* typed case report on the opened stack */}
+          {active && (
+            <mesh position={[0.03, 0.06, 0.04]} rotation={[-Math.PI / 2, 0, 0.05]}>
+              <planeGeometry args={[0.3, 0.42]} />
+              <meshBasicMaterial map={report} toneMapped={false} />
             </mesh>
           )}
         </group>
