@@ -1,0 +1,192 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  background: #0c0b09;
+}
+
+body {
+  overflow: hidden;
+  font-family: 'Inter', system-ui, sans-serif;
+  color: #e8e2d4;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  user-select: none;
+}
+
+::selection {
+  background: #c0392b;
+  color: #f5efe1;
+}
+
+/* keyboard focus in the chrome accent (mouse clicks stay ringless) */
+:focus-visible {
+  outline: 1px solid rgba(255, 42, 42, 0.75);
+  outline-offset: 2px;
+}
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* thin custom scrollbar inside document panels */
+.scroll-thin {
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: rgba(255, 42, 42, 0.5) transparent;
+}
+.scroll-thin::-webkit-scrollbar {
+  width: 8px;
+}
+.scroll-thin::-webkit-scrollbar-thumb {
+  background: rgba(255, 42, 42, 0.5);
+  border-radius: 8px;
+}
+.scroll-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+@layer components {
+  /* Aged document paper */
+  .paper {
+    background-color: #e8e2d4;
+    background-image:
+      radial-gradient(circle at 18% 12%, rgba(120, 96, 54, 0.12), transparent 38%),
+      radial-gradient(circle at 82% 88%, rgba(120, 96, 54, 0.14), transparent 42%),
+      radial-gradient(circle at 60% 30%, rgba(150, 120, 70, 0.08), transparent 30%);
+    color: #1a160e;
+    box-shadow:
+      inset 0 0 60px rgba(90, 70, 40, 0.18),
+      0 30px 60px -20px rgba(0, 0, 0, 0.8);
+  }
+
+  /* Faint film grain overlay (DOM layer, complements postprocessing) */
+  .grain::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.06;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    mix-blend-mode: overlay;
+  }
+
+  /* Cinematic vignette over the whole viewport */
+  .vignette::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: radial-gradient(ellipse at center, transparent 52%, rgba(0, 0, 0, 0.72) 100%);
+  }
+
+  /* HUD chip — KH-style clean geometric sans */
+  .hud-chip {
+    @apply font-hud text-[10px] tracking-[0.22em] uppercase text-paper/70;
+  }
+
+  /* Neon-red glow for key chrome accents (KH shadow-[0_0_10px_#ff2a2a]) */
+  .glow-red {
+    text-shadow: 0 0 10px rgba(255, 42, 42, 0.5);
+  }
+
+  /* KH-style dark "dossier" panel — near-black, faint neon-red inner ring */
+  .dossier {
+    background:
+      radial-gradient(120% 80% at 50% 0%, rgba(255, 42, 42, 0.07), transparent 60%),
+      linear-gradient(180deg, rgba(17, 15, 12, 0.97), rgba(8, 7, 6, 0.985));
+    color: #e8e2d4;
+    box-shadow:
+      0 40px 90px -28px rgba(0, 0, 0, 0.92),
+      inset 0 0 0 1px rgba(255, 42, 42, 0.16),
+      inset 0 0 80px rgba(0, 0, 0, 0.5);
+  }
+
+  /* Neon-red L-shaped HUD corner bracket (positioned per-corner via utilities) */
+  .hud-corner {
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    border-color: rgba(255, 42, 42, 0.9);
+    filter: drop-shadow(0 0 3px rgba(255, 42, 42, 0.45));
+    pointer-events: none;
+  }
+
+  /* Printed barcode strip (footer of every dossier) */
+  .barcode {
+    height: 16px;
+    width: 132px;
+    opacity: 0.55;
+    background-image: repeating-linear-gradient(
+      90deg,
+      #e8e2d4 0 1px, transparent 1px 3px,
+      #e8e2d4 3px 5px, transparent 5px 6px,
+      #e8e2d4 6px 9px, transparent 9px 11px,
+      #e8e2d4 11px 12px, transparent 12px 15px
+    );
+  }
+
+  /* Bordered skill / tag chip on the dark dossier */
+  .chip {
+    @apply inline-flex items-center border border-paper/25 bg-paper/[0.03] px-2.5 py-1
+           font-hud text-[11px] tracking-wide text-paper/80;
+  }
+
+  /* Red evidence stamp */
+  .stamp {
+    border: 3px solid rgba(192, 57, 43, 0.85);
+    color: rgba(192, 57, 43, 0.92);
+    text-shadow: 0 0 1px rgba(192, 57, 43, 0.4);
+    box-shadow: inset 0 0 0 1px rgba(192, 57, 43, 0.35);
+    mix-blend-mode: multiply;
+  }
+
+  .btn-noir {
+    @apply font-stencil tracking-[0.18em] uppercase border border-paper/40 text-paper/90
+           px-6 py-3 transition-all duration-300 hover:bg-paper hover:text-ink hover:border-paper;
+  }
+}
+
+/* Newspaper drop-cap for the lede paragraph */
+.drop-cap::first-letter {
+  font-family: 'Playfair Display', serif;
+  font-weight: 900;
+  font-size: 3.2em;
+  line-height: 0.8;
+  float: left;
+  padding: 6px 8px 0 0;
+  color: #1a160e;
+}
+
+/* Typewriter blinking caret */
+.caret::after {
+  content: '▋';
+  margin-left: 2px;
+  animation: blink 1.1s step-end infinite;
+}
+
+@keyframes blink {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
