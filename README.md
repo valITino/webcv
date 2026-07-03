@@ -61,8 +61,13 @@ The optimised 3D models are committed in `public/models/`, so a fresh clone runs
 The only thing the running site loads from outside is its fonts (Google Fonts CDN); offline it
 falls back to system faces.
 
-**Windows users:** the `scripts/*.sh` helpers need Git Bash or WSL. The plain `npm` commands
-below work in any shell.
+**Windows users:** every shell helper has a native PowerShell twin — use `.\scripts\dev.ps1`
+and `.\scripts\deploy.ps1` (same behaviour, PowerShell-style options: `-Check`, `-DryRun`, …).
+The `.sh` versions need Git Bash or WSL. If PowerShell refuses to run scripts ("running scripts
+is disabled on this system"), run once via `powershell -NoProfile -ExecutionPolicy Bypass -File
+scripts\dev.ps1`, or allow local scripts for your user with
+`Set-ExecutionPolicy -Scope CurrentUser RemoteSigned`. The plain `npm` commands below work in
+any shell.
 
 ### Quick start (one command)
 
@@ -72,6 +77,13 @@ cd webcv
 ./scripts/dev.sh          # checks prerequisites, installs deps, starts the dev server
 ```
 
+```powershell
+# Windows (PowerShell) — same thing, native:
+git clone https://github.com/valITino/webcv.git
+cd webcv
+.\scripts\dev.ps1
+```
+
 Then open **http://localhost:5173** in a desktop browser. The script also accepts:
 
 ```bash
@@ -79,6 +91,8 @@ Then open **http://localhost:5173** in a desktop browser. The script also accept
 ./scripts/dev.sh --fresh       # wipe node_modules and reinstall first
 ./scripts/dev.sh --port 3000   # serve on a different port
 ```
+
+(PowerShell: `.\scripts\dev.ps1 -Check` / `-Fresh` / `-Port 3000`, and `-Help` for usage.)
 
 ### Manual setup (what the script does)
 
@@ -96,12 +110,12 @@ npm run dev        # dev server → http://localhost:5173
 
 | Command | What it does |
 | --- | --- |
-| `./scripts/dev.sh` | Verify prerequisites → install deps if needed → start the dev server |
+| `./scripts/dev.sh` · `.\scripts\dev.ps1` | Verify prerequisites → install deps if needed → start the dev server |
 | `npm run dev` | Start the Vite dev server on port 5173 (hot reload) |
 | `npm run build` | Production build → `dist/` (ES2020 target, vendor chunks split) |
 | `npm run preview` | Serve the built `dist/` locally on port 4173 — a pre-deploy sanity check, **not** a production server |
 | `npm run optimize:models` | Re-optimise raw GLBs from `raw-assets/` into `public/models/` (a harmless no-op if `raw-assets/` is absent) |
-| `./scripts/deploy.sh <target>` | Build and deploy to a webserver or hosting platform (see **Deployment**) |
+| `./scripts/deploy.sh <target>` · `.\scripts\deploy.ps1 <target>` | Build and deploy to a webserver or hosting platform (see **Deployment**) |
 
 ---
 
@@ -151,7 +165,8 @@ The one requirement: **serve the site from a domain root** (`https://cv.example.
 `https://example.com/cv/`). The app loads its models with root-absolute URLs (`/models/*.glb`),
 which Vite's `base` option does not rewrite — under a sub-path the 3D assets would 404.
 
-`scripts/deploy.sh` builds and ships `dist/` in one step:
+`scripts/deploy.sh` — or `scripts\deploy.ps1` in PowerShell on Windows — builds and ships
+`dist/` in one step (both read the same `deploy.config`):
 
 ```bash
 cp deploy.config.example deploy.config   # fill in the target you use (git-ignored)
@@ -164,10 +179,12 @@ cp deploy.config.example deploy.config   # fill in the target you use (git-ignor
 
 Useful flags: `--dry-run` (ssh: preview the sync without changing anything), `--draft`
 (netlify: preview URL instead of production), `--skip-build` (reuse the existing `dist/`).
+PowerShell: same targets — `.\scripts\deploy.ps1 ssh` etc. — with the flags spelled
+`-DryRun`, `-Draft`, `-SkipBuild`.
 
 | Target | One-time setup | Notes |
 | --- | --- | --- |
-| `ssh` | fill `DEPLOY_SSH_*` in `deploy.config`; SSH access to the docroot | Any static server (nginx, Apache, Caddy). rsync with `--delete` keeps old hashed bundles from piling up; falls back to tar-over-ssh if rsync is missing |
+| `ssh` | fill `DEPLOY_SSH_*` in `deploy.config`; SSH access to the docroot | Any static server (nginx, Apache, Caddy). rsync with `--delete` keeps old hashed bundles from piling up; without rsync it falls back to tar-over-ssh (`.sh`) / tar+scp (`.ps1`, works with Windows' built-in OpenSSH client) |
 | `netlify` | `npx netlify-cli login` then `npx netlify-cli init` | netlify-cli requires **Node ≥ 20**; deploys the locally built `dist/` (`--no-build`); for CI use `NETLIFY_AUTH_TOKEN` + `NETLIFY_SITE_ID` |
 | `vercel` | `npx vercel login` | First run prompts to link a project; Vercel auto-detects Vite and builds server-side |
 | `cloudflare` | `npx wrangler login` then `npx wrangler pages project create` | wrangler requires **Node ≥ 22**; set `CF_PAGES_PROJECT` in `deploy.config` for non-interactive deploys |
@@ -267,7 +284,7 @@ src/
   data/        profile · skills · exhibits · credits · registry
   i18n/        en · de · fr + auto-detection
   store/       useStore (experience state) · useContent (CMS overlay)
-scripts/       dev.sh · deploy.sh · optimize-models.mjs
+scripts/       dev.sh + dev.ps1 · deploy.sh + deploy.ps1 · optimize-models.mjs
 ```
 
 ---
@@ -276,8 +293,9 @@ scripts/       dev.sh · deploy.sh · optimize-models.mjs
 
 | Symptom | Cause & fix |
 | --- | --- |
-| `npm ci` / `npm run dev` fails immediately | Node too old — run `node --version`; you need ≥ 18 (20 LTS recommended). `./scripts/dev.sh --check` verifies this for you |
-| Port 5173 already in use | `./scripts/dev.sh --port 3000` (or `npm run dev -- --port 3000`) |
+| `npm ci` / `npm run dev` fails immediately | Node too old — run `node --version`; you need ≥ 18 (20 LTS recommended). `./scripts/dev.sh --check` (PowerShell: `.\scripts\dev.ps1 -Check`) verifies this for you |
+| Port 5173 already in use | `./scripts/dev.sh --port 3000` / `.\scripts\dev.ps1 -Port 3000` (or `npm run dev -- --port 3000`) |
+| `.ps1` won't run — "running scripts is disabled on this system" | PowerShell's execution policy blocks script files — run once via `powershell -NoProfile -ExecutionPolicy Bypass -File scripts\dev.ps1`, or allow local scripts with `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned`. Got the repo as a ZIP instead of `git clone`? Also run `Unblock-File scripts\*.ps1` (downloaded files are marked as untrusted) |
 | "ACCESS RESTRICTED // DESKTOP ONLY" | Viewport is narrower than 1024 px or the device has no fine pointer — use a desktop browser at full width |
 | "EVIDENCE ROOM UNAVAILABLE" / black canvas | WebGL is unavailable — enable hardware acceleration in the browser, update GPU drivers, avoid remote-desktop sessions |
 | 3D models 404 after deploying | The site is served under a sub-path — it must live at a domain root (see **Deployment**) |

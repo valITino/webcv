@@ -10,7 +10,7 @@
 # Prerequisites it verifies for you:
 #   • Node.js >= 18 (Vite 5 requires ^18.0.0 || >=20.0.0)
 #   • npm (bundled with Node.js)
-# Windows users: run this from Git Bash or WSL, or use `npm install && npm run dev`.
+# Windows users: use the PowerShell twin scripts/dev.ps1, or run this from Git Bash/WSL.
 # ─────────────────────────────────────────────────────────────────────────────
 set -euo pipefail
 

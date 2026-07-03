@@ -1,9 +1,12 @@
-# deploy.config — local settings for scripts/deploy.sh
+# deploy.config — local settings for scripts/deploy.sh AND scripts/deploy.ps1
 #
 #   cp deploy.config.example deploy.config     # then fill in your values
+#   (PowerShell: Copy-Item deploy.config.example deploy.config)
 #
 # deploy.config is git-ignored, so hostnames and paths stay on your machine.
 # Only fill in the section for the target you use; leave the rest commented.
+# Keep it to simple KEY="value" lines — the PowerShell script parses the same
+# file, so shell-only syntax ($HOME, $(…), multi-line values) won't work.
 
 # ── Target: ssh (your own webserver — nginx, Apache, Caddy…) ──────────────
 # The server just needs to serve static files; the docroot must be reachable
@@ -29,6 +32,6 @@
 
 # ── Target: netlify / vercel ──────────────────────────────────────────────
 # No variables needed here — both CLIs store their link/auth state themselves
-# (run the one-time login/init commands shown in scripts/deploy.sh).
+# (run the one-time login/init commands shown in scripts/deploy.sh|.ps1).
 # For CI / non-interactive Netlify deploys you can export instead:
 #   NETLIFY_AUTH_TOKEN=…   NETLIFY_SITE_ID=…

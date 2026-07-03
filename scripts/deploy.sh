@@ -16,6 +16,7 @@
 #
 # Settings come from ./deploy.config (git-ignored) — copy deploy.config.example
 # to deploy.config and fill in your target's values.
+# Windows users: the PowerShell twin scripts/deploy.ps1 reads the same file.
 #
 # IMPORTANT — serve from the DOMAIN ROOT. The app loads its 3D models with
 # root-absolute URLs (/models/*.glb), which Vite's `base` option does not
@@ -27,7 +28,7 @@ set -euo pipefail
 
 cd "$(dirname "${BASH_SOURCE[0]}")/.."
 
-usage() { sed -n '2,25p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'; }
+usage() { sed -n '2,26p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'; }
 fail()  { printf 'error: %s\n' "$1" >&2; exit 1; }
 note()  { printf '── %s\n' "$1"; }
 
