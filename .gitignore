@@ -7,3 +7,9 @@ dist-ssr
 
 # Raw / uncompressed source models (compressed copies live in public/models)
 /raw-assets
+
+# Local deploy settings (copy deploy.config.example) + host-CLI state dirs
+deploy.config
+.netlify
+.vercel
+.wrangler
