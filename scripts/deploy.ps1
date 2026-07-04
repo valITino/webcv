@@ -112,21 +112,28 @@ try {
   # deploy.config win over inherited environment variables.
   $Config = @{}
   if (Test-Path 'deploy.config') {
-    foreach ($line in Get-Content 'deploy.config') {
-      if ($line -match '^\s*(?:export\s+)?([A-Za-z_][A-Za-z0-9_]*)=(.*)$') {
-        $name = $Matches[1]
-        $value = $Matches[2].Trim()
-        if ($value -match '^"(.*)"$') { $value = $Matches[1] }
-        elseif ($value -match "^'(.*)'$") { $value = $Matches[1] }
+    foreach ($line in Get-Content -Encoding UTF8 'deploy.config') {
+      if ($line -match '^\s*(export\s+)?([A-Za-z_][A-Za-z0-9_]*)=(.*)$') {
+        $isExport = [bool]$Matches[1]
+        $name = $Matches[2]
+        $value = $Matches[3].Trim()
+        if ($value -match '^"([^"]*)"\s*(#.*)?$') { $value = $Matches[1] }
+        elseif ($value -match "^'([^']*)'\s*(#.*)?$") { $value = $Matches[1] }
         else { $value = ($value -split '\s+#', 2)[0].Trim() }   # strip trailing comments
         $Config[$name] = $value
+        # `export VAR=…` lines reach child processes when deploy.sh sources the
+        # file (e.g. NETLIFY_AUTH_TOKEN) — mirror that for the CLIs run below.
+        if ($isExport -and $value) { Set-Item -Path "env:$name" -Value $value }
       }
     }
   }
+  # Same fallback chain as sourcing the file in bash: a deploy.config assignment
+  # always masks an inherited environment variable (even when set to ''), and
+  # the default applies whenever the winning value is empty (like ${VAR:-def}).
   function Get-Setting([string]$Name, [string]$Default = '') {
-    if ($Config.ContainsKey($Name) -and $Config[$Name] -ne '') { return $Config[$Name] }
-    $fromEnv = [Environment]::GetEnvironmentVariable($Name)
-    if ($fromEnv) { return $fromEnv }
+    if ($Config.ContainsKey($Name)) { $value = $Config[$Name] }
+    else { $value = [Environment]::GetEnvironmentVariable($Name) }
+    if ($value) { return $value }
     return $Default
   }
 
@@ -201,9 +208,13 @@ try {
           Note "Uploading → ${HostSpec}:${RemoteDir}/"
           scp -P $SshPort -q $bundle "${HostSpec}:$bundleName"
           if ($LASTEXITCODE -ne 0) { Fail "scp upload failed (exit code $LASTEXITCODE)" }
-          # Single-quote the docroot for the remote POSIX shell; keep $-signs literal.
+          # Single-quote the docroot for the remote POSIX shell; keep $-signs
+          # literal. The bundle is addressed relative to the remote home (where
+          # sshd starts commands) — no double quotes may appear in this string,
+          # because PowerShell 5.1's legacy native-argument quoting passes
+          # embedded double quotes through unescaped and would mangle it.
           $remoteDirQ = "'" + ($RemoteDir -replace "'", "'\''") + "'"
-          $remoteCmd = 'mkdir -p {0} && tar -xzf "$HOME/{1}" -C {0}; s=$?; rm -f "$HOME/{1}"; exit $s' -f $remoteDirQ, $bundleName
+          $remoteCmd = 'mkdir -p {0} && tar -xzf {1} -C {0}; s=$?; rm -f {1}; exit $s' -f $remoteDirQ, $bundleName
           ssh -p $SshPort $HostSpec $remoteCmd
           if ($LASTEXITCODE -ne 0) { Fail "remote extraction failed (exit code $LASTEXITCODE)" }
         } finally {
@@ -285,8 +296,8 @@ gh-pages would serve this repo at github.io/<repo>/, where the app's root-absolu
         Invoke-Git -C $Tmp init -q
         Invoke-Git -C $Tmp symbolic-ref HEAD "refs/heads/$Branch"   # portable branch naming (git init -b needs >= 2.28)
         Invoke-Git -C $Tmp add -A
-        $AuthorName = if ($env:GIT_AUTHOR_NAME) { $env:GIT_AUTHOR_NAME } else { 'deploy' }
-        $AuthorEmail = if ($env:GIT_AUTHOR_EMAIL) { $env:GIT_AUTHOR_EMAIL } else { 'deploy@localhost' }
+        $AuthorName = Get-Setting 'GIT_AUTHOR_NAME' 'deploy'
+        $AuthorEmail = Get-Setting 'GIT_AUTHOR_EMAIL' 'deploy@localhost'
         Invoke-Git -C $Tmp -c "user.name=$AuthorName" -c "user.email=$AuthorEmail" commit -q -m 'deploy: production build'
         Invoke-Git -C $Tmp push --force $RemoteUrl $Branch
         Note "Pushed. In the repo settings enable Pages → 'Deploy from a branch' → $Branch / root."

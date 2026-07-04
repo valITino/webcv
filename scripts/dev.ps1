@@ -76,7 +76,8 @@ function Invoke-NpmLine([string]$Line) {
 }
 
 if ($Help) { Get-Help -Detailed $PSCommandPath; exit 0 }
-if ($Port -lt 0 -or $Port -gt 65535) { Fail '-Port must be between 1 and 65535' }
+if ($Port -lt 0 -or $Port -gt 65535) { Fail '-Port must be between 0 and 65535' }
+$PortGiven = $PSBoundParameters.ContainsKey('Port')
 
 # Always operate from the repository root, wherever the script is called from.
 Push-Location (Join-Path $PSScriptRoot '..')
@@ -114,8 +115,10 @@ try {
   $stamp = Join-Path 'node_modules' '.package-lock.json'
   # -Force: on Linux/macOS pwsh treats dot-files as hidden and Get-Item skips
   # them otherwise (Test-Path still sees them, so the guard alone won't help).
+  # A missing package-lock.json counts as up to date, like bash's [[ -nt ]].
   $needInstall = (-not (Test-Path node_modules)) -or (-not (Test-Path $stamp)) -or
-    ((Get-Item -Force 'package-lock.json').LastWriteTimeUtc -gt (Get-Item -Force $stamp).LastWriteTimeUtc)
+    ((Test-Path 'package-lock.json') -and
+      ((Get-Item -Force 'package-lock.json').LastWriteTimeUtc -gt (Get-Item -Force $stamp).LastWriteTimeUtc))
   if ($needInstall) {
     Write-Host 'Installing dependencies (npm ci)…'
     npm ci --no-audit --no-fund
@@ -129,7 +132,7 @@ try {
   Write-Host 'The experience is desktop-only: open it in a desktop browser with a mouse.'
   Write-Host ''
 
-  if ($Port -gt 0) {
+  if ($PortGiven) {
     Invoke-NpmLine "npm run dev -- --port $Port"
   } else {
     npm run dev   # vite.config.js serves on http://localhost:5173 (host: true)
